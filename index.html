@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Családfa elemzés - Rozsomák Tanár Úr</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           ROZSOMÁK DESIGN SYSTEM - CSS VÁLTOZÓK
+           ========================================= */
+        :root {
+            --bg-tajga-ho: #F8F9FA;
+            --text-medvebarna: #2D2A26;
+            --accent-borostyan: #D97725;
+            --accent-fenyo: #2C5E4B;
+            --surface-karty: #FFFFFF;
+            
+            --hard-shadow: 4px 4px 0px #2D2A26;
+            --hard-shadow-hover: 2px 2px 0px #2D2A26;
+            --border-thick: 3px solid #2D2A26;
+            --border-radius: 0px; /* Szigorú, szögletes design */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-tajga-ho);
+            color: var(--text-medvebarna);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto Slab', serif;
+            color: var(--text-medvebarna);
+            font-weight: 700;
+        }
+
+        /* Fejléc */
+        .site-header {
+            border-bottom: var(--border-thick);
+            background-color: var(--bg-tajga-ho);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-header .logo {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Aszimmetrikus Grid Layout (40% - 60%) */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        @media (min-width: 992px) {
+            .layout-grid {
+                grid-template-columns: 4fr 6fr;
+            }
+        }
+
+        /* Bal oszlop: Elmélet és vezérlés */
+        .theory-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .theory-panel h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Jobb oszlop: Interaktív vászon */
+        .interactive-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .canvas-container {
+            background: var(--surface-karty);
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow);
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+        }
+
+        svg {
+            max-width: none;
+            height: auto;
+            display: block;
+        }
+
+        /* Kártyák és Vezérlők */
+        .question-group {
+            background: var(--surface-karty);
+            padding: 1.5rem;
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .question-group h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* Szögletesített, "tudományos" rádiógombok */
+        input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-medvebarna);
+            background: var(--surface-karty);
+            cursor: pointer;
+            position: relative;
+        }
+
+        input[type="radio"]:checked {
+            background-color: var(--accent-borostyan);
+            border-color: var(--text-medvebarna);
+        }
+        
+        input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--text-medvebarna);
+        }
+
+        /* Gombok */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 0.85rem 1.5rem;
+            border: var(--border-thick);
+            background: var(--surface-karty);
+            color: var(--text-medvebarna);
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            box-shadow: var(--hard-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--hard-shadow-hover);
+        }
+
+        button.active {
+            background: var(--accent-borostyan);
+        }
+
+        .primary-btn {
+            background-color: var(--accent-borostyan);
+            flex: 2;
+        }
+
+        .secondary-btn {
+            background-color: var(--bg-tajga-ho);
+            flex: 1;
+        }
+
+        /* Visszajelzés */
+        .feedback {
+            padding: 1.25rem;
+            border: var(--border-thick);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            box-shadow: var(--hard-shadow);
+        }
+
+        .feedback.hidden {
+            display: none;
+        }
+
+        .feedback.success {
+            background-color: var(--surface-karty);
+            border-color: var(--accent-fenyo);
+            color: var(--accent-fenyo);
+        }
+
+        .feedback.error {
+            background-color: var(--surface-karty);
+            border-color: var(--accent-borostyan);
+        }
+
+        /* Lábléc */
+        .site-footer {
+            background-color: var(--text-medvebarna);
+            color: var(--bg-tajga-ho);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        
+        .site-footer a {
+            color: var(--accent-borostyan);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 22h18L12 2z"/></svg>
+            Rozsomák Tanár Úr
+        </div>
+        <div class="course-name">Genetika és öröklődéstan</div>
+    </header>
+
+    <main class="layout-grid">
+        <aside class="theory-panel">
+            <div>
+                <h1>Családfa elemzés</h1>
+                <p>Határozd meg az öröklődés menetét a jobbra látható családfa alapján! A vizsgálat során hagyatkozz a biztosan kizárható lehetőségekre.</p>
+            </div>
+            
+            <div class="controls-panel">
+                <div class="button-group">
+                    <button id="modeBasicBtn" class="active" style="flex:1">Alap mód</button>
+                    <button id="modeAdvBtn" style="flex:1">Haladó mód</button>
+                </div>
+                
+                <div id="basicQuiz" class="quiz-section">
+                    <div class="question-group">
+                        <h3>Öröklődés típusa</h3>
+                        <label><input type="radio" name="dominance" value="Domináns"> Domináns</label>
+                        <label><input type="radio" name="dominance" value="Recesszív"> Recesszív</label>
+                        <label><input type="radio" name="dominance" value="Eldönthetetlen"> Nem eldönthető</label>
+                    </div>
+                    
+                    <div class="question-group">
+                        <h3>Kromoszóma</h3>
+                        <label><input type="radio" name="chromosome" value="Autoszomális"> Autoszomális</label>
+                        <label><input type="radio" name="chromosome" value="X-kromoszómás"> X-kromoszómás</label>
+                        <label><input type="radio" name="chromosome" value="Eldönthetetlen"> Nem eldönthető</label>
+                    </div>
+                </div>
+
+                <div id="advQuiz" class="quiz-section" style="display: none;">
+                    <div class="question-group">
+                        <h3 id="advInstructions" style="color: var(--accent-fenyo); font-size: 1.2rem; margin-bottom: 1rem;">Ebben a családban az öröklődés menete: ...</h3>
+                        <p style="margin-bottom: 15px; font-weight: 600;">Mi a sárga (vastag) kerettel jelölt személy genotípusa?</p>
+                        <div style="display:flex; gap: 20px; flex-wrap: wrap;">
+                            <label><input type="radio" name="genotype" value="AA"> AA</label>
+                            <label><input type="radio" name="genotype" value="Aa"> Aa</label>
+                            <label><input type="radio" name="genotype" value="aa"> aa</label>
+                            <label><input type="radio" name="genotype" value="A?"> A?</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="checkBtn" class="primary-btn">Ellenőrzés</button>
+                    <button id="nextBtn" class="secondary-btn">Új generálása</button>
+                </div>
+                
+                <div id="feedback" class="feedback hidden"></div>
+            </div>
+        </aside>
+
+        <section class="interactive-panel">
+            <div class="canvas-container">
+                <svg id="pedigreeCanvas" width="800" height="500"></svg>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Készítette: Rozsomák tanár úr | 2024</p>
+        <p style="margin-top: 5px; opacity: 0.8; font-size: 0.8rem;">A felület elemei Public Domain (CC0) licenc alatt szabadon felhasználhatók a természettudományos oktatás támogatására.</p>
+    </footer>
+
+    <script>
+        const CONFIG = {
+            canvasWidth: 800,
+            canvasHeight: 500,
+            nodeSize: 30,
+            genGapY: 120,
+            siblingGapX: 80
+        };
+
+        let currentPedigree = null;
+        let currentAnswers = {};
+        let appMode = 'basic';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+            document.getElementById('nextBtn').addEventListener('click', initApp);
+            
+            document.getElementById('modeBasicBtn').addEventListener('click', () => setMode('basic'));
+            document.getElementById('modeAdvBtn').addEventListener('click', () => setMode('advanced'));
+        });
+
+        function setMode(mode) {
+            appMode = mode;
+            document.getElementById('modeBasicBtn').className = mode === 'basic' ? 'active' : '';
+            document.getElementById('modeAdvBtn').className = mode === 'advanced' ? 'active' : '';
+            
+            document.getElementById('basicQuiz').style.display = mode === 'basic' ? 'block' : 'none';
+            document.getElementById('advQuiz').style.display = mode === 'advanced' ? 'block' : 'none';
+            
+            initApp();
+        }
+
+        function initApp() {
+            clearFeedback();
+            resetRadios();
+            
+            if (appMode === 'basic') {
+                currentPedigree = generateValidPedigree(false);
+                currentAnswers = analyzePedigree(currentPedigree);
+            } else {
+                currentPedigree = generateValidPedigree(true);
+                let trueMode = currentPedigree.trueMode;
+                
+                calculateGenotypes(currentPedigree.tree, trueMode);
+                
+                let pool = currentPedigree.tree;
+                let wantsKnown = Math.random() < 0.8;
+                let candidates = pool.filter(n => wantsKnown ? (n.deducedGenotype !== 'A?') : (n.deducedGenotype === 'A?'));
+                if (candidates.length === 0 || Math.random() < 0.2) candidates = pool; 
+                
+                let target = candidates[Math.floor(Math.random() * candidates.length)];
+                
+                currentAnswers = {
+                    targetId: target.id,
+                    genotype: target.deducedGenotype,
+                    trueMode: trueMode
+                };
+                
+                let modeText = trueMode === 'DA' ? 'Autoszomális Domináns' : 'Autoszomális Recesszív';
+                document.getElementById('advInstructions').innerHTML = 'Ebben a családban az öröklődés menete:<br> <span>' + modeText + '</span>.';
+            }
+            
+            renderPedigree(currentPedigree);
+        }
+
+        function calculateGenotypes(tree, mode) {
+            tree.forEach(n => {
+                if (mode === 'DA') {
+                    if (!n.affected) {
+                        n.deducedGenotype = 'aa';
+                    } else {
+                        let hasUnaffectedParent = (n.father && !n.father.affected) || (n.mother && !n.mother.affected);
+                        let hasUnaffectedChild = tree.some(c => (c.father === n || c.mother === n) && !c.affected);
+                        if (hasUnaffectedParent || hasUnaffectedChild) {
+                            n.deducedGenotype = 'Aa';
+                        } else {
+                            n.deducedGenotype = 'A?';
+                        }
+                    }
+                } else if (mode === 'RA') {
+                    if (n.affected) {
+                        n.deducedGenotype = 'aa';
+                    } else {
+                        let hasAffectedParent = (n.father && n.father.affected) || (n.mother && n.mother.affected);
+                        let hasAffectedChild = tree.some(c => (c.father === n || c.mother === n) && c.affected);
+                        if (hasAffectedParent || hasAffectedChild) {
+                            n.deducedGenotype = 'Aa';
+                        } else {
+                            n.deducedGenotype = 'A?';
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // Pedigree Generator
+        // ==========================================
+        function generateRandomTree() {
+            let currentId = 1;
+            const tree = [];
+            
+            function createNode(sex, gen) {
+                let node = { id: currentId++, sex: sex || (Math.random() < 0.5 ? 'M' : 'F'), gen, affected: false, x: 0, y: 0, father: null, mother: null };
+                tree.push(node);
+                return node;
+            }
+
+            let numGen1Couples = 1; 
+            let families = [];
+            let allNodesByGen = [[], [], [], []]; 
+            
+            for (let i = 0; i < numGen1Couples; i++) {
+                let f = createNode('F', 0);
+                let m = createNode('M', 0);
+                
+                let numChildren = Math.floor(Math.random() * 3) + 2;
+                let children = [];
+                for(let c=0; c<numChildren; c++) {
+                    let child = createNode(null, 1);
+                    child.father = m;
+                    child.mother = f;
+                    children.push(child);
+                }
+                families.push({ parents: [f, m], children, gen: 0 });
+                allNodesByGen[0].push(f, m);
+                allNodesByGen[1].push(...children);
+            }
+
+            let gen2ChildrenCount = allNodesByGen[1].length;
+            let numMarriages = Math.min(Math.floor(Math.random() * 2) + 1, gen2ChildrenCount);
+            
+            for(let i=0; i<numMarriages; i++) {
+                let child = allNodesByGen[1][i];
+                let outsider = createNode(child.sex === 'M' ? 'F' : 'M', 1);
+                allNodesByGen[1].push(outsider);
+
+                let numChildren = Math.floor(Math.random() * 3) + 1;
+                let children = [];
+                for(let c=0; c<numChildren; c++) {
+                    let nchild = createNode(null, 2);
+                    nchild.father = child.sex === 'M' ? child : outsider;
+                    nchild.mother = child.sex === 'F' ? child : outsider;
+                    children.push(nchild);
+                }
+                families.push({ parents: [child, outsider], children, gen: 1 });
+                allNodesByGen[2].push(...children);
+            }
+            
+            if (Math.random() < 0.5 && allNodesByGen[2].length > 0) {
+                let child = allNodesByGen[2][0];
+                let outsider = createNode(child.sex === 'M' ? 'F' : 'M', 2);
+                allNodesByGen[2].push(outsider);
+
+                let numChildren = Math.floor(Math.random() * 2) + 1;
+                let children = [];
+                for(let c=0; c<numChildren; c++) {
+                    let nchild = createNode(null, 3);
+                    nchild.father = child.sex === 'M' ? child : outsider;
+                    nchild.mother = child.sex === 'F' ? child : outsider;
+                    children.push(nchild);
+                }
+                families.push({ parents: [child, outsider], children, gen: 2 });
+                allNodesByGen[3].push(...children);
+            }
+
+            return { tree, families, allNodesByGen };
+        }
+
+        function assignPhenotypes(pedigreeData, mode) {
+            const { tree } = pedigreeData;
+            tree.forEach(n => n.genotype = "");
+
+            function calculateGenotype(node) {
+                if (node.genotype) return node.genotype;
+                
+                let p1Allele = '', p2Allele = '';
+                if (!node.father && !node.mother) {
+                    if (mode.includes('X')) {
+                        if (node.sex === 'M') {
+                            p1Allele = Math.random() < 0.5 ? 'A' : 'a';
+                            return p1Allele;
+                        } else {
+                            let a1 = Math.random() < 0.5 ? 'A' : 'a';
+                            let a2 = Math.random() < 0.5 ? 'A' : 'a';
+                            return a1 + a2;
+                        }
+                    } else {
+                        let a1 = Math.random() < 0.5 ? 'A' : 'a';
+                        let a2 = Math.random() < 0.5 ? 'A' : 'a';
+                        return a1 + a2;
+                    }
+                }
+
+                let fGeno = calculateGenotype(node.father);
+                let mGeno = calculateGenotype(node.mother);
+
+                if (mode.includes('X')) {
+                    if (node.sex === 'M') {
+                        return mGeno[Math.floor(Math.random() * 2)];
+                    } else {
+                        return fGeno[0] + mGeno[Math.floor(Math.random() * 2)];
+                    }
+                } else {
+                    return fGeno[Math.floor(Math.random() * 2)] + mGeno[Math.floor(Math.random() * 2)];
+                }
+            }
+
+            tree.forEach(n => {
+                n.genotype = calculateGenotype(n);
+                if (mode === 'DA') n.affected = n.genotype.includes('A');
+                if (mode === 'RA') n.affected = !n.genotype.includes('A'); 
+                if (mode === 'DX') n.affected = n.genotype.includes('A');
+                if (mode === 'RX') n.affected = !n.genotype.includes('A');
+            });
+
+            let affectedCount = tree.filter(n => n.affected).length;
+            if (affectedCount === 0 || affectedCount === tree.length) {
+                return false; 
+            }
+            return true; 
+        }
+
+        function generateValidPedigree(forceAutosomal = false) {
+            const modes = forceAutosomal ? ['DA', 'RA'] : ['DA', 'RA', 'DX', 'RX'];
+            let chosenMode = modes[Math.floor(Math.random() * modes.length)];
+            
+            let bestData = null;
+            let bestScore = -1;
+            
+            for (let attempts = 0; attempts < 500; attempts++) {
+                let data = generateRandomTree();
+                let valid = assignPhenotypes(data, chosenMode);
+                
+                if (valid) {
+                    let analysis = analyzePedigree({tree: data.tree});
+                    
+                    let score = 0;
+                    if (analysis.dominance !== 'Eldönthetetlen') score += 10;
+                    if (analysis.chromosome !== 'Eldönthetetlen') score += 10;
+                    
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestData = data;
+                    }
+                    
+                    if (score === 20) break;
+                }
+            }
+            
+            bestData.trueMode = chosenMode;
+            layoutPedigree(bestData);
+            return bestData;
+        }
+
+        // ==========================================
+        // Algorithm Rules
+        // ==========================================
+        function testDA(tree) {
+            for (let p of tree) {
+                if (p.affected && p.mother && p.father) {
+                    if (!p.mother.affected && !p.father.affected) return [p.mother, p.father, p];
+                }
+            }
+            return true;
+        }
+
+        function testRA(tree) {
+            for (let p of tree) {
+                if (!p.affected && p.mother && p.father) {
+                    if (p.mother.affected && p.father.affected) return [p.mother, p.father, p];
+                }
+            }
+            return true;
+        }
+
+        function testDX(tree) {
+            let da_viol = testDA(tree);
+            if (da_viol !== true) return da_viol; 
+            for (let p of tree) {
+                if (p.sex === 'M' && p.affected && p.mother) {
+                    if (!p.mother.affected) return [p.mother, p];
+                }
+                if (p.sex === 'M' && p.affected) {
+                    const daughters = tree.filter(n => n.father === p && n.sex === 'F');
+                    let b = daughters.find(d => !d.affected);
+                    if (b) return [p, b];
+                }
+            }
+            return true;
+        }
+
+        function testRX(tree) {
+            let ra_viol = testRA(tree);
+            if (ra_viol !== true) return ra_viol;
+            for (let p of tree) {
+                if (p.sex === 'F' && p.affected) {
+                    if (p.father && !p.father.affected) return [p.father, p];
+                }
+                if (p.sex === 'F' && p.affected) {
+                    const sons = tree.filter(n => n.mother === p && n.sex === 'M');
+                    let b = sons.find(s => !s.affected);
+                    if (b) return [p, b];
+                }
+            }
+            return true;
+        }
+
+        function analyzePedigree(pedigreeData) {
+            let tree = pedigreeData.tree;
+            
+            let da = testDA(tree);
+            let ra = testRA(tree);
+            let dx = testDX(tree);
+            let rx = testRX(tree);
+
+            let da_valid = da === true;
+            let ra_valid = ra === true;
+            let dx_valid = dx === true;
+            let rx_valid = rx === true;
+
+            let d_possible = da_valid || dx_valid;
+            let r_possible = ra_valid || rx_valid;
+            let a_possible = da_valid || ra_valid;
+            let x_possible = dx_valid || rx_valid;
+
+            let dominance = "Eldönthetetlen";
+            if (d_possible && !r_possible) dominance = "Domináns";
+            if (!d_possible && r_possible) dominance = "Recesszív";
+
+            let chromosome = "Eldönthetetlen";
+            if (a_possible && !x_possible) chromosome = "Autoszomális";
+            if (!a_possible && x_possible) chromosome = "X-kromoszómás";
+
+            return { dominance, chromosome, violations: { da, ra, dx, rx } };
+        }
+
+        // ==========================================
+        // Layout & Rendering
+        // ==========================================
+        function layoutPedigree(data) {
+            const { families, tree } = data;
+            const SPACING_X = 80;
+            const GAP_Y = CONFIG.genGapY;
+            
+            let nodeToFam = new Map();
+            families.forEach(f => { f.parents.forEach(p => nodeToFam.set(p, f)); });
+
+            let rootFams = families.filter(f => f.gen === 0);
+
+            function calcWidth(node) {
+                let fam = nodeToFam.get(node);
+                if (!fam) {
+                    node.width = SPACING_X;
+                    return node.width;
+                }
+                let childrenW = 0;
+                fam.children.forEach(c => { childrenW += calcWidth(c); });
+                fam.width = Math.max(2 * SPACING_X, childrenW);
+                return fam.width;
+            }
+
+            function positionFamily(fam, xCenter, yTop) {
+                let p1 = fam.parents[0];
+                let p2 = fam.parents[1];
+                
+                if (p1.sex === 'F' && p2.sex === 'M') {
+                    let temp = p1; p1 = p2; p2 = temp;
+                }
+
+                p1.x = xCenter - (SPACING_X / 2);
+                p2.x = xCenter + (SPACING_X / 2);
+                p1.y = yTop;
+                p2.y = yTop;
+                
+                if (fam.children.length === 0) return;
+                
+                let startX = xCenter - (fam.width / 2);
+                
+                fam.children.forEach(c => {
+                    let childFam = nodeToFam.get(c);
+                    let cw = childFam ? childFam.width : SPACING_X;
+                    
+                    let cCenter = startX + (cw / 2);
+                    c.x = cCenter;
+                    c.y = yTop + GAP_Y;
+                    
+                    if (childFam) {
+                        positionFamily(childFam, cCenter, yTop + GAP_Y);
+                    }
+                    
+                    startX += cw;
+                });
+            }
+
+            let globalX = 0;
+            rootFams.forEach(rf => {
+                let cw = 0;
+                rf.children.forEach(c => cw += calcWidth(c));
+                rf.width = Math.max(2 * SPACING_X, cw);
+                
+                let rfCenter = globalX + rf.width / 2;
+                positionFamily(rf, rfCenter, 50);
+                
+                globalX += rf.width + SPACING_X;
+            });
+
+            let minX = Math.min(...tree.map(n => n.x));
+            let maxX = Math.max(...tree.map(n => n.x));
+            let treeWidth = maxX - minX + SPACING_X;
+            
+            let maxGen = Math.max(...tree.map(n => n.gen));
+            let reqWidth = Math.max(CONFIG.canvasWidth, treeWidth + 100);
+            let reqHeight = Math.max(CONFIG.canvasHeight, (maxGen + 2) * GAP_Y);
+            
+            let svg = document.getElementById('pedigreeCanvas');
+            svg.setAttribute('width', reqWidth);
+            svg.setAttribute('height', reqHeight);
+            
+            let offsetX = (reqWidth - treeWidth) / 2 - minX + (SPACING_X / 2);
+            
+            tree.forEach(n => { n.x += offsetX; });
+        }
+
+        function renderPedigree(data) {
+            const svg = document.getElementById('pedigreeCanvas');
+            svg.innerHTML = ''; 
+
+            const { families, tree } = data;
+
+            function drawLine(x1, y1, x2, y2) {
+                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', '#2D2A26'); /* Rozsomák sötét vonal */
+                line.setAttribute('stroke-width', 3);
+                svg.appendChild(line);
+            }
+
+            families.forEach(f => {
+                let p1 = f.parents[0];
+                let p2 = f.parents[1];
+                
+                let cx1 = p1.x; let cy1 = p1.y;
+                let cx2 = p2.x; let cy2 = p2.y;
+                
+                let leftP = cx1 < cx2 ? p1 : p2;
+                let rightP = cx1 > cx2 ? p1 : p2;
+                drawLine(leftP.x + CONFIG.nodeSize/2, cy1, rightP.x - CONFIG.nodeSize/2, cy2);
+
+                let cxM = (cx1 + cx2) / 2;
+                let dropHeight = CONFIG.genGapY / 2;
+                drawLine(cxM, cy1, cxM, cy1 + dropHeight);
+
+                if (f.children.length > 0) {
+                    let xs = f.children.map(c => c.x);
+                    xs.push(cxM); 
+                    
+                    let minC = Math.min(...xs);
+                    let maxC = Math.max(...xs);
+                    let ySib = cy1 + dropHeight;
+                    
+                    if (minC !== maxC) {
+                        drawLine(minC, ySib, maxC, ySib);
+                    }
+
+                    f.children.forEach(c => {
+                        drawLine(c.x, ySib, c.x, c.y - CONFIG.nodeSize/2);
+                    });
+                }
+            });
+
+            tree.forEach(n => {
+                // Rozsomák design: Fekete (beteg) és Fehér (egészséges) a tudományos kontrasztért
+                let fill = n.affected ? '#2D2A26' : '#FFFFFF';
+                let stroke = '#2D2A26';
+                let strokeW = 3;
+
+                if (appMode === 'advanced' && n.id === currentAnswers.targetId) {
+                    stroke = '#D97725'; // Rozsomák borostyán kiemelés
+                    strokeW = 6;
+                }
+
+                if (n.sex === 'M') {
+                    let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('id', 'node-' + n.id);
+                    rect.setAttribute('x', n.x - CONFIG.nodeSize/2);
+                    rect.setAttribute('y', n.y - CONFIG.nodeSize/2);
+                    rect.setAttribute('width', CONFIG.nodeSize);
+                    rect.setAttribute('height', CONFIG.nodeSize);
+                    rect.setAttribute('fill', fill);
+                    rect.setAttribute('stroke', stroke);
+                    rect.setAttribute('stroke-width', strokeW);
+                    svg.appendChild(rect);
+                } else {
+                    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('id', 'node-' + n.id);
+                    circle.setAttribute('cx', n.x);
+                    circle.setAttribute('cy', n.y);
+                    circle.setAttribute('r', CONFIG.nodeSize/2);
+                    circle.setAttribute('fill', fill);
+                    circle.setAttribute('stroke', stroke);
+                    circle.setAttribute('stroke-width', strokeW);
+                    svg.appendChild(circle);
+                }
+            });
+        }
+
+        // ==========================================
+        // User Interaction
+        // ==========================================
+        function checkAnswers() {
+            clearHighlights();
+            let fb = document.getElementById('feedback');
+            fb.innerHTML = "";
+
+            if (appMode === 'advanced') {
+                let genInput = document.querySelector('input[name="genotype"]:checked');
+                if (!genInput) {
+                    showFeedback('Kérjük, válassz ki egy genotípust!', 'error');
+                    return;
+                }
+                
+                let userGen = genInput.value;
+                let correctGen = currentAnswers.genotype;
+                
+                if (userGen === correctGen) {
+                    showFeedback('Helyes! A levezetés logikus és pontos.', 'success');
+                } else {
+                    let msgStr = `Helytelen.<br>A helyes megoldás: <strong>${correctGen}</strong>.<br><br>`;
+                    
+                    let explanation = '';
+                    if (currentAnswers.trueMode === 'DA') {
+                        if (correctGen === 'aa') explanation = "Mivel domináns az öröklődés menete és a személy egészséges (fehér), ezért a genotípus csak dupla recesszív (aa) lehet.";
+                        else if (correctGen === 'Aa') explanation = "A személy beteg, tehát van egy 'A' allélja. A másik allélja azért biztosan 'a', mert vagy legalább az egyik szülője egészséges (aa), vagy mert született legalább egy egészséges gyereke (aa). Emiatt heterozigóta (Aa).";
+                        else if (correctGen === 'A?') explanation = "A személy beteg (van 'A' allél), de mivel a felmenői és utódai között megcáfoló egyén (akinek muszáj lenne 'a' allélt átadnia) nincs a direkt vonalán, az ábrából nem lehet száz százalékos bizonyossággal megmondani a másik allélt. Ezért az illető A?.";
+                    } else if (currentAnswers.trueMode === 'RA') {
+                        if (correctGen === 'aa') explanation = "Mivel recesszív a betegség, ő pedig érintett (beteg), így a genotípus csakis (aa) lehet.";
+                        else if (correctGen === 'Aa') explanation = "A személy egészséges ('A' allél), viszont van egy beteg (aa) szülője akitől kötelezően örökölt egy 'a' allélt, VAGY van egy beteg (aa) gyereke, akinek muszáj volt átadnia egy 'a' allélt. Így ő hordozó (Aa).";
+                        else if (correctGen === 'A?') explanation = "A személy egészséges ('A'), de a felmenői és utódai között sem látni beteget a direkt vonalán akinek garantáltan 'a' allélt kellett volna adnia, ezért az ábrából nem levezethető biztosra a második allélje. A megoldás A?.";
+                    }
+                    msgStr += `<div style='text-align: left; font-size: 0.95em'><strong>Magyarázat:</strong><br>${explanation}</div>`;
+                    showFeedback(msgStr, 'error');
+                    
+                    highlightNodes([{id: currentAnswers.targetId}]);
+                }
+                return;
+            }
+
+            let domInput = document.querySelector('input[name="dominance"]:checked');
+            let chrInput = document.querySelector('input[name="chromosome"]:checked');
+
+            if (!domInput || !chrInput) {
+                showFeedback('Kérjük, válassz ki minden opciót az elemzéshez!', 'error');
+                return;
+            }
+
+            let userDom = domInput.value;
+            let userChr = chrInput.value;
+
+            let correctDom = currentAnswers.dominance;
+            let correctChr = currentAnswers.chromosome;
+            
+            let isPerfect = (userDom === correctDom) && (userChr === correctChr);
+            
+            if (isPerfect) {
+                showFeedback('Helyes! Kiváló megfigyelés.', 'success');
+                return;
+            }
+
+            let msgStr = `Tévedés.<br>Helyes megállapítás: <strong>Öröklődés: ${correctDom} — Kromoszóma: ${correctChr}</strong>`;
+            
+            let highlights = [];
+            let hints = [];
+            let viols = currentAnswers.violations;
+            
+            if (userDom !== correctDom) {
+                if (userDom === 'Domináns' && viols.da !== true) {
+                    highlights.push(...viols.da);
+                    hints.push("- <strong>Domináns öröklődés esetén:</strong> Lehetetlen, hogy két egészséges szülőnek beteg gyermeke szülessen.");
+                } else if (userDom === 'Recesszív' && viols.ra !== true) {
+                    highlights.push(...viols.ra);
+                    hints.push("- <strong>Recesszív öröklődés esetén:</strong> Lehetetlen, hogy két beteg szülőnek egészséges gyermeke szülessen.");
+                } else if (userDom === 'Eldönthetetlen') {
+                    if (correctDom === 'Domináns' && viols.ra !== true) {
+                        highlights.push(...viols.ra);
+                        hints.push("- A recesszív öröklődés kizárható (két beteg szülőnek egészséges gyereke született), tehát az ábra biztosan <strong>Domináns</strong>.");
+                    } else if (correctDom === 'Recesszív' && viols.da !== true) {
+                        highlights.push(...viols.da);
+                        hints.push("- A domináns öröklődés kizárható (egészséges szülőknek beteg gyereke született), tehát az ábra biztosan <strong>Recesszív</strong>.");
+                    }
+                }
+            }
+            
+            if (userChr !== correctChr) {
+                if (userChr === 'X-kromoszómás' || userChr === 'Eldönthetetlen') {
+                    if (correctChr === 'Autoszomális') {
+                        if (viols.dx !== true && Array.isArray(viols.dx)) {
+                            highlights.push(...viols.dx);
+                            hints.push("- <strong>Nem lehet X-hez kötött domináns:</strong> Mert a beteg apának van egészséges lánya (vagy egészséges anyának beteg fia).");
+                        }
+                        if (viols.rx !== true && Array.isArray(viols.rx)) {
+                            highlights.push(...viols.rx);
+                            hints.push("- <strong>Nem lehet X-hez kötött recesszív:</strong> Mert a beteg lánynak egészséges az apja (vagy beteg anyának egészséges a fia).");
+                        }
+                    }
+                }
+            }
+            
+            let uniqueHighlights = Array.from(new Set(highlights.map(h => h.id))).map(id => highlights.find(h => h.id === id));
+            if (uniqueHighlights.length > 0) {
+                highlightNodes(uniqueHighlights);
+            }
+            
+            if (hints.length > 0) {
+                hints = [...new Set(hints)];
+                msgStr += "<br><br><div style='text-align: left; font-size: 0.95em'><strong>Miért hibás a következtetés?</strong><br>" + hints.join("<br>") + "</div>";
+            }
+
+            showFeedback(msgStr, 'error');
+        }
+
+        function highlightNodes(nodes) {
+            nodes.forEach(n => {
+                let el = document.getElementById('node-' + n.id);
+                if (el) {
+                    el.setAttribute('stroke', '#D97725'); /* Rozsomák borostyán hibajelzés */
+                    el.setAttribute('stroke-width', '6');
+                }
+            });
+        }
+
+        function clearHighlights() {
+            let shapes = document.querySelectorAll('svg rect, svg circle');
+            shapes.forEach(el => {
+                el.setAttribute('stroke', '#2D2A26');
+                el.setAttribute('stroke-width', '3');
+            });
+        }
+
+        function showFeedback(msg, type) {
+            let fb = document.getElementById('feedback');
+            fb.innerHTML = msg;
+            fb.className = 'feedback ' + type;
+            fb.style.display = 'block';
+        }
+
+        function clearFeedback() {
+            let fb = document.getElementById('feedback');
+            fb.className = 'feedback hidden';
+            fb.innerHTML = '';
+            fb.style.display = 'none';
+        }
+
+        function resetRadios() {
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+        }
+    </script>
+</body>
+</html>
