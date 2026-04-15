@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Populációgenetika - Rozsomák Tanár Úr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-tajga-ho: #F8F9FA;
+            --text-medvebarna: #2D2A26;
+            --accent-borostyan: #D97725;
+            --accent-fenyo: #2C5E4B;
+            --surface-karty: #FFFFFF;
+            
+            --hard-shadow: 4px 4px 0px #2D2A26;
+            --hard-shadow-hover: 2px 2px 0px #2D2A26;
+            --border-thick: 3px solid #2D2A26;
+            --border-radius: 0px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-tajga-ho);
+            color: var(--text-medvebarna);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Roboto Slab', serif;
+            color: var(--text-medvebarna);
+            font-weight: 700;
+        }
+
+        .site-header {
+            border-bottom: var(--border-thick);
+            background-color: var(--bg-tajga-ho);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-header .logo {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .task-card {
+            background: var(--surface-karty);
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--text-medvebarna);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .task-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Számos input design */
+        input[type="number"] {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            padding: 0.75rem;
+            border: var(--border-thick);
+            background: var(--bg-tajga-ho);
+            width: 100%;
+            max-width: 300px;
+            outline: none;
+            font-weight: 600;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--accent-borostyan);
+        }
+
+        /* Radio design az A típusú feladathoz */
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+        }
+
+        label.radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-medvebarna);
+            background: var(--surface-karty);
+            cursor: pointer;
+            position: relative;
+        }
+
+        input[type="radio"]:checked {
+            background-color: var(--accent-borostyan);
+            border-color: var(--text-medvebarna);
+        }
+        
+        input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px;
+            background: var(--text-medvebarna);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: var(--border-thick);
+            background: var(--surface-karty);
+            color: var(--text-medvebarna);
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            box-shadow: var(--hard-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--hard-shadow-hover);
+        }
+
+        .primary-btn {
+            background-color: var(--accent-borostyan);
+        }
+
+        .feedback {
+            padding: 1.5rem;
+            border: var(--border-thick);
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            box-shadow: var(--hard-shadow);
+            display: none;
+        }
+
+        .feedback.success {
+            background-color: #E8F5E9;
+            border-color: var(--accent-fenyo);
+            display: block;
+        }
+
+        .feedback.error {
+            background-color: #FFF3E0;
+            border-color: var(--accent-borostyan);
+            display: block;
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.2);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .math {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .site-footer {
+            background-color: var(--text-medvebarna);
+            color: var(--bg-tajga-ho);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo">Rozsomák Tanár Úr</div>
+        <div>Hardy-Weinberg Gyakorló</div>
+    </header>
+
+    <main class="main-container">
+        <div class="task-card">
+            <h2 class="task-title" id="taskTitle">Feladat betöltése...</h2>
+            <p class="task-text" id="taskText"></p>
+
+            <div id="inputA" class="input-group" style="display: none;">
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="hw_eq" value="igen"> Egyensúlyban van
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="hw_eq" value="nem"> Nincs egyensúlyban
+                    </label>
+                </div>
+            </div>
+
+            <div id="inputNum" class="input-group" style="display: none;">
+                <input type="number" id="numAnswer" step="0.0001" placeholder="Pl: 0.3200">
+                <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Add meg az eredményt 4 tizedesjegy pontossággal!</p>
+            </div>
+
+            <div class="controls">
+                <button id="checkBtn" class="primary-btn">Ellenőrzés</button>
+                <button id="nextBtn">Új Feladat</button>
+            </div>
+
+            <div id="feedbackBox" class="feedback"></div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Készítette: Rozsomák tanár úr | H-W Egyensúly modul</p>
+    </footer>
+
+    <script>
+        const organisms = [
+            { name: "oroszlán", traits: [ { trait: "sörény színe", dom: "sötét", rec: "világos" }, { trait: "farokbojt mérete", dom: "nagy", rec: "kicsi" }, { trait: "szőrzet mintázata", dom: "homogén", rec: "foltos" }, { trait: "szem színe", dom: "barna", rec: "sárga" } ] },
+            { name: "vízidisznó", traits: [ { trait: "bundasűrűség", dom: "sűrű", rec: "ritka" }, { trait: "úszóhártya fejlettsége", dom: "fejlett", rec: "csökevényes" }, { trait: "testméret", dom: "robusztus", rec: "kisebb" }, { trait: "orrforma", dom: "széles", rec: "keskeny" } ] },
+            { name: "ecetmuslica", traits: [ { trait: "szárny alakja", dom: "egyenes", rec: "görbült" }, { trait: "szemszín", dom: "piros", rec: "fehér" }, { trait: "testsötétség", dom: "világosbarna", rec: "ébenfekete" }, { trait: "sörték hossza", dom: "hosszú", rec: "rövid" } ] },
+            { name: "hagymaszagú kányazsombor", traits: [ { trait: "levél fogazottsága", dom: "erősen fogazott", rec: "enyhén fogazott" }, { trait: "virágszirom mérete", dom: "nagy", rec: "kicsi" }, { trait: "szár szőrössége", dom: "kopasz", rec: "szőrös" }, { trait: "illat intenzitása", dom: "erős", rec: "gyenge" } ] },
+            { name: "gyöngyvirág", traits: [ { trait: "harangok száma", dom: "sok", rec: "kevés" }, { trait: "levél szélessége", dom: "széles", rec: "keskeny" }, { trait: "bogyótermés színe", dom: "élénkpiros", rec: "narancssárga" }, { trait: "gyöktörzs vastagsága", dom: "vastag", rec: "vékony" } ] },
+            { name: "lugasépítő madár", traits: [ { trait: "tollazat fénye", dom: "fémes", rec: "matt" }, { trait: "csőr hossza", dom: "hosszú", rec: "rövid" }, { trait: "építési hajlam", dom: "erős", rec: "gyenge" }, { trait: "szemgyűrű színe", dom: "kék", rec: "sárga" } ] },
+            { name: "szivárványos ökle", traits: [ { trait: "pikkelyek csillogása", dom: "erős", rec: "gyenge" }, { trait: "úszók színezete", dom: "élénk", rec: "halvány" }, { trait: "testalkat", dom: "nyújtott", rec: "zömök" }, { trait: "ívási dörzscsapok száma", dom: "sok", rec: "kevés" } ] }
+        ];
+
+        let currentTask = null;
+
+        function randInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function formatN(num) {
+            return num.toFixed(4);
+        }
+
+        function generateTask() {
+            // Tiszta lap
+            document.getElementById("feedbackBox").className = "feedback";
+            document.getElementById("numAnswer").value = "";
+            let radios = document.getElementsByName("hw_eq");
+            for(let i=0; i<radios.length; i++) radios[i].checked = false;
+
+            const org = organisms[randInt(0, organisms.length - 1)];
+            const tr = org.traits[randInt(0, org.traits.length - 1)];
+            const taskTypes = ['A', 'B', 'C'];
+            const type = taskTypes[randInt(0, 2)];
+            
+            let task = { type: type, organism: org.name, trait: tr };
+
+            if (type === 'A') {
+                document.getElementById('taskTitle').innerText = "H-W egyensúly ellenőrzése";
+                document.getElementById('inputA').style.display = 'block';
+                document.getElementById('inputNum').style.display = 'none';
+
+                let isEq = Math.random() < 0.5;
+                let obsDD, obsDd, obsdd;
+
+                if (isEq) {
+                    let p = randInt(20, 80) / 100; // 0.2 - 0.8
+                    obsDD = p * p;
+                    obsDd = 2 * p * (1 - p);
+                    obsdd = (1 - p) * (1 - p);
+                } else {
+                    // Generáljunk olyat, ami biztosan nincs egyensúlyban
+                    obsDD = randInt(10, 60) / 100;
+                    obsDd = randInt(10, 80 - (obsDD*100)) / 100;
+                    obsdd = 1 - obsDD - obsDd;
+                }
+
+                task.text = `Egy vadon élő ${org.name} populációt vizsgálsz. A(z) ${tr.trait} tekintetében a domináns homozigóták (${tr.dom}) megfigyelt aránya <strong>${formatN(obsDD)}</strong>, míg a heterozigótáké <strong>${formatN(obsDd)}</strong>.<br><br>A kérdés: Hardy-Weinberg egyensúlyban van-e a populáció?`;
+                task.expectedStr = isEq ? "igen" : "nem";
+                
+                // Levezetés számítása
+                let p_calc = obsDD + (obsDd / 2);
+                let q_calc = 1 - p_calc;
+                let expDD = p_calc * p_calc;
+                let expDd = 2 * p_calc * q_calc;
+
+                task.explanation = `
+                    <strong>Levezetés:</strong><br>
+                    1. Először kiszámoljuk a recesszív homozigóták megfigyelt arányát: <br>
+                    <span class="math">1 - ${formatN(obsDD)} - ${formatN(obsDd)} = ${formatN(obsdd)}</span><br>
+                    2. Kiszámoljuk a domináns allél (p) tényleges gyakoriságát az egyedekből:<br>
+                    <span class="math">p = Megfigyelt(AA) + Megfigyelt(Aa) / 2 = ${formatN(obsDD)} + ${formatN(obsDd/2)} = ${formatN(p_calc)}</span><br>
+                    3. Ha egyensúly van, a heterozigóták aránya <span class="math">2pq</span> kellene, hogy legyen:<br>
+                    <span class="math">2 &middot; ${formatN(p_calc)} &middot; ${formatN(q_calc)} = ${formatN(expDd)}</span><br>
+                    Mivel a megfigyelt érték (${formatN(obsDd)}) ${isEq ? "megegyezik az" : "eltér az"} elvárttal (${formatN(expDd)}), a populáció <strong>${isEq ? "egyensúlyban van" : "nincs egyensúlyban"}</strong>.
+                `;
+
+            } else if (type === 'B') {
+                document.getElementById('taskTitle').innerText = "Heterozigóták aránya";
+                document.getElementById('inputA').style.display = 'none';
+                document.getElementById('inputNum').style.display = 'block';
+
+                let q = randInt(10, 90) / 100; // 0.1 - 0.9
+                let q2 = q * q;
+                let p = 1 - q;
+                let expectedAns = 2 * p * q;
+
+                task.text = `Egy Hardy-Weinberg egyensúlyban lévő ${org.name} populációban ismert a recesszívek (${tr.rec} ${tr.trait}) előfordulása, ami pontosan <strong>${formatN(q2)}</strong>.<br><br>Mekkora a heterozigóták aránya a populációban?`;
+                task.expectedNum = expectedAns;
+
+                task.explanation = `
+                    <strong>Levezetés:</strong><br>
+                    1. A recesszív homozigóták aránya <span class="math">q<sup>2</sup> = ${formatN(q2)}</span><br>
+                    2. Ebből a recesszív allél gyakorisága gyökvonással: <span class="math">q = &radic;${formatN(q2)} = ${formatN(q)}</span><br>
+                    3. A domináns allél gyakorisága: <span class="math">p = 1 - q = 1 - ${formatN(q)} = ${formatN(p)}</span><br>
+                    4. A heterozigóták aránya (a kérdéses érték): <span class="math">2pq = 2 &middot; ${formatN(p)} &middot; ${formatN(q)} = <strong>${formatN(expectedAns)}</strong></span>
+                `;
+
+            } else if (type === 'C') {
+                document.getElementById('taskTitle').innerText = "Feltételes heterozigóta valószínűség";
+                document.getElementById('inputA').style.display = 'none';
+                document.getElementById('inputNum').style.display = 'block';
+
+                let q = randInt(15, 85) / 100; // 0.15 - 0.85
+                let q2 = q * q;
+                let p = 1 - q;
+                let p2 = p * p;
+                let pq2 = 2 * p * q;
+                
+                // Valószínűség, hogy egy *domináns* egyed heterozigóta: 2pq / (p^2 + 2pq)
+                let expectedAns = pq2 / (p2 + pq2); 
+
+                task.text = `Egy Hardy-Weinberg egyensúlyban lévő ${org.name} populációban a ${tr.rec} (recesszív) ${tr.trait} gyakorisága <strong>${formatN(q2)}</strong>.<br><br>Ha ebből a populációból véletlenszerűen kiválasztunk egy <strong>domináns (${tr.dom})</strong> fenotípusú egyedet, mekkora az esélye annak, hogy genotípusát tekintve heterozigóta?`;
+                task.expectedNum = expectedAns;
+
+                task.explanation = `
+                    <strong>Levezetés:</strong><br>
+                    1. Recesszívek aránya <span class="math">q<sup>2</sup> = ${formatN(q2)}</span> &rarr; <span class="math">q = ${formatN(q)}</span> &rarr; <span class="math">p = ${formatN(p)}</span><br>
+                    2. A populációban a homozigóta dominánsak aránya: <span class="math">p<sup>2</sup> = ${formatN(p2)}</span><br>
+                    3. A heterozigóták aránya: <span class="math">2pq = ${formatN(pq2)}</span><br>
+                    4. A kérdés arra vonatkozott, hogy ha <em>már tudjuk</em> valakiről, hogy domináns fenotípusú (azaz a <span class="math">p<sup>2</sup> + 2pq</span> csoportba tartozik), akkor mekkora eséllyel heterozigóta. Ez egy feltételes valószínűség:<br>
+                    <span class="math">2pq / (p<sup>2</sup> + 2pq) = ${formatN(pq2)} / (${formatN(p2)} + ${formatN(pq2)}) = <strong>${formatN(expectedAns)}</strong></span>
+                `;
+            }
+
+            document.getElementById('taskText').innerHTML = task.text;
+            currentTask = task;
+        }
+
+        document.getElementById('checkBtn').addEventListener('click', () => {
+            if (!currentTask) return;
+            
+            let isCorrect = false;
+            let fbBox = document.getElementById("feedbackBox");
+
+            if (currentTask.type === 'A') {
+                let selected = document.querySelector('input[name="hw_eq"]:checked');
+                if (!selected) {
+                    alert("Kérlek válaszd ki, hogy egyensúlyban van-e!");
+                    return;
+                }
+                isCorrect = (selected.value === currentTask.expectedStr);
+            } else {
+                let userVal = parseFloat(document.getElementById('numAnswer').value);
+                if (isNaN(userVal)) {
+                    alert("Kérlek írj be egy érvényes számot!");
+                    return;
+                }
+                // Hibahatár a C típusú lebegőpontos osztásokhoz
+                isCorrect = Math.abs(userVal - currentTask.expectedNum) <= 0.0002;
+            }
+
+            fbBox.className = "feedback " + (isCorrect ? "success" : "error");
+            
+            let resultTitle = isCorrect ? "✅ Helyes válasz! Kiváló munka." : "❌ Helytelen válasz.";
+            let resultHtml = `<h3>${resultTitle}</h3>`;
+            
+            if (!isCorrect) {
+                 if(currentTask.type !== 'A') {
+                     resultHtml += `<p style="margin-top: 10px">A helyes eredmény: <strong>${formatN(currentTask.expectedNum)}</strong></p>`;
+                 }
+                 resultHtml += `<div class="explanation">${currentTask.explanation}</div>`;
+            } else {
+                 resultHtml += `<div class="explanation" style="opacity: 0.8">${currentTask.explanation}</div>`;
+            }
+
+            fbBox.innerHTML = resultHtml;
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', generateTask);
+
+        // Első feladat generálása betöltéskor
+        window.addEventListener('DOMContentLoaded', generateTask);
+    </script>
+</body>
+</html>
