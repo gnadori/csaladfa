@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Populációgenetika - Rozsomák Tanár Úr</title>
+    <title>Populációgenetika - Rozsomák tanár úr</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
@@ -93,8 +93,8 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Számos input design */
-        input[type="number"] {
+        /* Input type text-re cserélve a vessző támogatása miatt */
+        input[type="text"].num-input {
             font-family: 'Inter', sans-serif;
             font-size: 1.2rem;
             padding: 0.75rem;
@@ -106,11 +106,10 @@
             font-weight: 600;
         }
 
-        input[type="number"]:focus {
+        input[type="text"].num-input:focus {
             border-color: var(--accent-borostyan);
         }
 
-        /* Radio design az A típusú feladathoz */
         .radio-group {
             display: flex;
             gap: 2rem;
@@ -225,8 +224,8 @@
 <body>
 
     <header class="site-header">
-        <div class="logo">Rozsomák Tanár Úr</div>
-        <div>Hardy-Weinberg Gyakorló</div>
+        <div class="logo">Rozsomák tanár úr</div>
+        <div>Hardy-Weinberg gyakorló</div>
     </header>
 
     <main class="main-container">
@@ -246,13 +245,13 @@
             </div>
 
             <div id="inputNum" class="input-group" style="display: none;">
-                <input type="number" id="numAnswer" step="0.0001" placeholder="Pl: 0.3200">
-                <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Add meg az eredményt 4 tizedesjegy pontossággal!</p>
+                <input type="text" class="num-input" id="numAnswer" placeholder="Pl: 0,3200">
+                <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Add meg az eredményt 4 tizedesjegy pontossággal (tizedesvesszővel)!</p>
             </div>
 
             <div class="controls">
                 <button id="checkBtn" class="primary-btn">Ellenőrzés</button>
-                <button id="nextBtn">Új Feladat</button>
+                <button id="nextBtn">Új feladat</button>
             </div>
 
             <div id="feedbackBox" class="feedback"></div>
@@ -260,7 +259,7 @@
     </main>
 
     <footer class="site-footer">
-        <p>Készítette: Rozsomák tanár úr | H-W Egyensúly modul</p>
+        <p>Készítette: Rozsomák tanár úr | H-W egyensúly modul</p>
     </footer>
 
     <script>
@@ -281,11 +280,11 @@
         }
 
         function formatN(num) {
-            return num.toFixed(4);
+            // Tizedespont helyett tizedesvessző a kimenetben
+            return num.toFixed(4).replace('.', ',');
         }
 
         function generateTask() {
-            // Tiszta lap
             document.getElementById("feedbackBox").className = "feedback";
             document.getElementById("numAnswer").value = "";
             let radios = document.getElementsByName("hw_eq");
@@ -304,38 +303,48 @@
                 document.getElementById('inputNum').style.display = 'none';
 
                 let isEq = Math.random() < 0.5;
+                // N mindig 100 többszöröse, p mindig 0.1 többszöröse, így az egyensúlyi esetszámok mindig egész számok
+                let N = randInt(10, 50) * 100; 
+                let p_base = randInt(2, 8) / 10; 
+                let q_base = 1 - p_base;
+                
                 let obsDD, obsDd, obsdd;
 
                 if (isEq) {
-                    let p = randInt(20, 80) / 100; // 0.2 - 0.8
-                    obsDD = p * p;
-                    obsDd = 2 * p * (1 - p);
-                    obsdd = (1 - p) * (1 - p);
+                    obsDD = Math.round(p_base * p_base * N);
+                    obsDd = Math.round(2 * p_base * q_base * N);
+                    obsdd = N - obsDD - obsDd;
                 } else {
-                    // Generáljunk olyat, ami biztosan nincs egyensúlyban
-                    obsDD = randInt(10, 60) / 100;
-                    obsDd = randInt(10, 80 - (obsDD*100)) / 100;
-                    obsdd = 1 - obsDD - obsDd;
+                    // Ha nincs egyensúlyban, mesterségesen eltoljuk a heterozigótákat a homozigóták felé
+                    let shift = Math.round(N * 0.05);
+                    obsDD = Math.round(p_base * p_base * N) + shift;
+                    obsDd = Math.round(2 * p_base * q_base * N) - (2 * shift);
+                    obsdd = Math.round(q_base * q_base * N) + shift;
                 }
 
-                task.text = `Egy vadon élő ${org.name} populációt vizsgálsz. A(z) ${tr.trait} tekintetében a domináns homozigóták (${tr.dom}) megfigyelt aránya <strong>${formatN(obsDD)}</strong>, míg a heterozigótáké <strong>${formatN(obsDd)}</strong>.<br><br>A kérdés: Hardy-Weinberg egyensúlyban van-e a populáció?`;
+                let numDom = obsDD + obsDd;
+                let isHomoQuestion = Math.random() < 0.5;
+                let Z = isHomoQuestion ? obsDD : obsDd;
+                let Z_text = isHomoQuestion ? "homozigótának (AA)" : "heterozigótának (Aa)";
+
+                task.text = `Egy vadon élő ${org.name} populációt vizsgálsz. Összesen <strong>${N}</strong> egyedet figyeltetek meg. A(z) ${tr.trait} tekintetében ebből <strong>${numDom}</strong> bizonyult domináns fenotípusúnak (${tr.dom}). A genetikai vizsgálat kimutatta, hogy ezek közül pontosan <strong>${Z}</strong> egyed volt ${Z_text}.<br><br>A kérdés: Hardy-Weinberg egyensúlyban van-e a populáció?`;
                 task.expectedStr = isEq ? "igen" : "nem";
                 
-                // Levezetés számítása
-                let p_calc = obsDD + (obsDd / 2);
+                let p_calc = (obsDD + (obsDd / 2)) / N;
                 let q_calc = 1 - p_calc;
-                let expDD = p_calc * p_calc;
-                let expDd = 2 * p_calc * q_calc;
+                let expectedDd = 2 * p_calc * q_calc * N;
 
                 task.explanation = `
                     <strong>Levezetés:</strong><br>
-                    1. Először kiszámoljuk a recesszív homozigóták megfigyelt arányát: <br>
-                    <span class="math">1 - ${formatN(obsDD)} - ${formatN(obsDd)} = ${formatN(obsdd)}</span><br>
+                    1. Határozzuk meg a genotípusok pontos számát a megadott adatokból:<br>
+                       &bull; Mivel ${Z} volt a ${Z_text}, a másik domináns genotípus száma: <span class="math">${numDom} - ${Z} = ${numDom - Z}</span>.<br>
+                       &bull; Így tudjuk, hogy AA = ${obsDD}, Aa = ${obsDd}.<br>
+                       &bull; A recesszív egyedek (aa) száma: <span class="math">${N} - ${numDom} = ${obsdd}</span>.<br>
                     2. Kiszámoljuk a domináns allél (p) tényleges gyakoriságát az egyedekből:<br>
-                    <span class="math">p = Megfigyelt(AA) + Megfigyelt(Aa) / 2 = ${formatN(obsDD)} + ${formatN(obsDd/2)} = ${formatN(p_calc)}</span><br>
-                    3. Ha egyensúly van, a heterozigóták aránya <span class="math">2pq</span> kellene, hogy legyen:<br>
-                    <span class="math">2 &middot; ${formatN(p_calc)} &middot; ${formatN(q_calc)} = ${formatN(expDd)}</span><br>
-                    Mivel a megfigyelt érték (${formatN(obsDd)}) ${isEq ? "megegyezik az" : "eltér az"} elvárttal (${formatN(expDd)}), a populáció <strong>${isEq ? "egyensúlyban van" : "nincs egyensúlyban"}</strong>.
+                    <span class="math">p = [2 &middot; n(AA) + n(Aa)] / (2 &middot; N) = [2 &middot; ${obsDD} + ${obsDd}] / ${2 * N} = ${formatN(p_calc)}</span><br>
+                    3. Ha egyensúly van, a heterozigóták <em>várt</em> száma <span class="math">2pq &middot; N</span> kellene, hogy legyen:<br>
+                    <span class="math">2 &middot; ${formatN(p_calc)} &middot; ${formatN(q_calc)} &middot; ${N} = ${formatN(expectedDd/N * N)}</span> (kerekítve ${Math.round(expectedDd)})<br>
+                    Mivel a ténylegesen megfigyelt heterozigóták száma (${obsDd}) ${isEq ? "megegyezik a" : "eltér a"} várttal, a populáció <strong>${isEq ? "egyensúlyban van" : "nincs egyensúlyban"}</strong>.
                 `;
 
             } else if (type === 'B') {
@@ -343,7 +352,7 @@
                 document.getElementById('inputA').style.display = 'none';
                 document.getElementById('inputNum').style.display = 'block';
 
-                let q = randInt(10, 90) / 100; // 0.1 - 0.9
+                let q = randInt(10, 90) / 100;
                 let q2 = q * q;
                 let p = 1 - q;
                 let expectedAns = 2 * p * q;
@@ -364,13 +373,11 @@
                 document.getElementById('inputA').style.display = 'none';
                 document.getElementById('inputNum').style.display = 'block';
 
-                let q = randInt(15, 85) / 100; // 0.15 - 0.85
+                let q = randInt(15, 85) / 100;
                 let q2 = q * q;
                 let p = 1 - q;
                 let p2 = p * p;
                 let pq2 = 2 * p * q;
-                
-                // Valószínűség, hogy egy *domináns* egyed heterozigóta: 2pq / (p^2 + 2pq)
                 let expectedAns = pq2 / (p2 + pq2); 
 
                 task.text = `Egy Hardy-Weinberg egyensúlyban lévő ${org.name} populációban a ${tr.rec} (recesszív) ${tr.trait} gyakorisága <strong>${formatN(q2)}</strong>.<br><br>Ha ebből a populációból véletlenszerűen kiválasztunk egy <strong>domináns (${tr.dom})</strong> fenotípusú egyedet, mekkora az esélye annak, hogy genotípusát tekintve heterozigóta?`;
@@ -404,12 +411,13 @@
                 }
                 isCorrect = (selected.value === currentTask.expectedStr);
             } else {
-                let userVal = parseFloat(document.getElementById('numAnswer').value);
+                // A magyar vesszős formátumot pontra cseréljük a JS belső ellenőrzéséhez
+                let rawInput = document.getElementById('numAnswer').value.replace(',', '.');
+                let userVal = parseFloat(rawInput);
                 if (isNaN(userVal)) {
                     alert("Kérlek írj be egy érvényes számot!");
                     return;
                 }
-                // Hibahatár a C típusú lebegőpontos osztásokhoz
                 isCorrect = Math.abs(userVal - currentTask.expectedNum) <= 0.0002;
             }
 
@@ -432,7 +440,6 @@
 
         document.getElementById('nextBtn').addEventListener('click', generateTask);
 
-        // Első feladat generálása betöltéskor
         window.addEventListener('DOMContentLoaded', generateTask);
     </script>
 </body>
