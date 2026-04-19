@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mendeli öröklődés - Rozsomák tanár úr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-tajga-ho: #F8F9FA;
+            --text-medvebarna: #2D2A26;
+            --accent-borostyan: #D97725;
+            --accent-fenyo: #2C5E4B;
+            --surface-karty: #FFFFFF;
+            
+            --hard-shadow: 4px 4px 0px #2D2A26;
+            --hard-shadow-hover: 2px 2px 0px #2D2A26;
+            --border-thick: 3px solid #2D2A26;
+            --border-radius: 0px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-tajga-ho);
+            color: var(--text-medvebarna);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Roboto Slab', serif;
+            color: var(--text-medvebarna);
+            font-weight: 700;
+        }
+
+        .site-header {
+            border-bottom: var(--border-thick);
+            background-color: var(--bg-tajga-ho);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-header .logo {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .task-card {
+            background: var(--surface-karty);
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--text-medvebarna);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .task-text {
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label.radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem;
+            border: 2px solid transparent;
+            transition: border 0.2s;
+        }
+        
+        label.radio-label:hover {
+            border: 2px dashed #ccc;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-medvebarna);
+            background: var(--surface-karty);
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        input[type="radio"]:checked {
+            background-color: var(--accent-borostyan);
+            border-color: var(--text-medvebarna);
+        }
+        
+        input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px;
+            background: var(--text-medvebarna);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: var(--border-thick);
+            background: var(--surface-karty);
+            color: var(--text-medvebarna);
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            box-shadow: var(--hard-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--hard-shadow-hover);
+        }
+
+        .primary-btn {
+            background-color: var(--accent-borostyan);
+        }
+
+        .feedback {
+            padding: 1.5rem;
+            border: var(--border-thick);
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            box-shadow: var(--hard-shadow);
+            display: none;
+        }
+
+        .feedback.success {
+            background-color: #E8F5E9;
+            border-color: var(--accent-fenyo);
+            display: block;
+        }
+
+        .feedback.error {
+            background-color: #FFF3E0;
+            border-color: var(--accent-borostyan);
+            display: block;
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.2);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .site-footer {
+            background-color: var(--text-medvebarna);
+            color: var(--bg-tajga-ho);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        
+        .genotype {
+            font-family: 'Inter', monospace;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo">Rozsomák tanár úr</div>
+        <div>Mendeli öröklődés gyakorló</div>
+    </header>
+
+    <main class="main-container">
+        <div class="task-card">
+            <h2 class="task-title" id="taskTitle">Feladat betöltése...</h2>
+            <p class="task-text" id="taskText"></p>
+
+            <div id="optionsContainer" class="radio-group">
+                </div>
+
+            <div class="controls">
+                <button id="checkBtn" class="primary-btn">Ellenőrzés</button>
+                <button id="nextBtn">Új feladat</button>
+            </div>
+
+            <div id="feedbackBox" class="feedback"></div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Készítette: Rozsomák tanár úr | Klasszikus genetika modul</p>
+    </footer>
+
+    <script>
+        // Adatbázis az élőlényekről és tulajdonságaikról (Intermedier jelleg is biztosítva)
+        const organisms = [
+            { 
+                name: "kardszárnyú delfin", 
+                traits: [ 
+                    { trait: "hátúszó alakja", dom: "egyenes", rec: "hajlott", inter: "enyhén ívelt" }, 
+                    { trait: "szemfolt mérete", dom: "nagy", rec: "kicsi", inter: "közepes" }, 
+                    { trait: "hasi folt színe", dom: "hófehér", rec: "sárgás", inter: "törtfehér" }, 
+                    { trait: "testhossz", dom: "hosszú", rec: "rövid", inter: "átlagos" }, 
+                    { trait: "farokúszó szélessége", dom: "széles", rec: "keskeny", inter: "közepes" } 
+                ] 
+            },
+            { 
+                name: "pampanyúl", 
+                traits: [ 
+                    { trait: "fülek hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, 
+                    { trait: "szőrzet színe", dom: "vadasbarna", rec: "szürke", inter: "fakóbarna" }, 
+                    { trait: "lábak hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, 
+                    { trait: "bajuszszálak vastagsága", dom: "vastag", rec: "vékony", inter: "normál" }, 
+                    { trait: "farok mérete", dom: "hosszú", rec: "csonka", inter: "félhosszú" } 
+                ] 
+            },
+            { 
+                name: "ecetmuslica", 
+                traits: [ 
+                    { trait: "szemszín", dom: "piros", rec: "fehér", inter: "rózsaszín" }, 
+                    { trait: "szárny alakja", dom: "normál", rec: "csökevényes", inter: "féloldalas" }, 
+                    { trait: "testszín", dom: "világosbarna", rec: "ébenfekete", inter: "sötétbarna" }, 
+                    { trait: "sörték hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, 
+                    { trait: "tor mintázata", dom: "sima", rec: "csíkos", inter: "halványan csíkos" } 
+                ] 
+            },
+            { 
+                name: "sárgarépa", 
+                traits: [ 
+                    { trait: "gyökér színe", dom: "narancs", rec: "sárga", inter: "halványnarancs" }, 
+                    { trait: "gyökér alakja", dom: "hengeres", rec: "kúpos", inter: "félkúpos" }, 
+                    { trait: "levélzet sűrűsége", dom: "sűrű", rec: "ritka", inter: "közepes" }, 
+                    { trait: "cukortartalom", dom: "magas", rec: "alacsony", inter: "közepes" }, 
+                    { trait: "szárhossz", dom: "hosszú", rec: "rövid", inter: "félhosszú" } 
+                ] 
+            },
+            { 
+                name: "halvány geze", 
+                traits: [ 
+                    { trait: "tollazat mintázata", dom: "csíkos", rec: "pöttyös", inter: "foltos" }, 
+                    { trait: "szárnyfesztáv", dom: "széles", rec: "keskeny", inter: "közepes" }, 
+                    { trait: "csőr hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, 
+                    { trait: "ének hangmagassága", dom: "magas", rec: "mély", inter: "közepes" }, 
+                    { trait: "lábujjak hossza", dom: "hosszú", rec: "rövid", inter: "normál" } 
+                ] 
+            }
+        ];
+
+        let currentTask = null;
+
+        function randInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- FELADAT GENERÁTOROK ---
+
+        // A típus: Öröklődés menetének kikövetkeztetése számokból
+        function generateTaskA(org, traitObj) {
+            let task = { type: 'A' };
+            
+            // Randomizáljuk, melyik jelleg a "valódi" domináns a feladatban
+            let tA = traitObj.dom;
+            let tB = traitObj.rec;
+            if (Math.random() > 0.5) { tA = traitObj.rec; tB = traitObj.dom; }
+            let tInter = traitObj.inter;
+
+            let mode = randInt(0, 2); // 0: tA domináns, 1: tB domináns, 2: intermedier
+            let total = randInt(100, 250);
+            
+            let countA, countB, countInter = 0;
+
+            if (mode === 0) { // tA domináns (3:1 hasadás)
+                countA = Math.round(total * 0.75) + randInt(-3, 3);
+                countB = total - countA;
+                task.text = `Egy kutatócsoport két <strong>${tA}</strong> ${traitObj.trait}ú ${org.name} egyedet keresztezett (mindkettő heterozigóta volt). Az utódok között <strong>${countA} db ${tA}</strong> és <strong>${countB} db ${tB}</strong> fenotípusú egyedet számoltak.<br><br>Hogyan öröklődik a tulajdonság?`;
+                task.expectedId = "domA";
+                task.explanation = `Mivel az utódok aránya nagyjából 3:1 (${countA}:${countB}) a <strong>${tA}</strong> javára, egyértelmű, hogy a ${tA} domináns a ${tB} felett. Ez a klasszikus Mendeli monohibrid keresztezés heterozigóták közötti (Aa x Aa) hasadási aránya.`;
+            } else if (mode === 1) { // tB domináns (3:1 hasadás)
+                countB = Math.round(total * 0.75) + randInt(-3, 3);
+                countA = total - countB;
+                task.text = `Egy kutatócsoport két <strong>${tB}</strong> ${traitObj.trait}ú ${org.name} egyedet keresztezett. Az utódok között <strong>${countB} db ${tB}</strong> és <strong>${countA} db ${tA}</strong> fenotípusú egyedet számoltak.<br><br>Hogyan öröklődik a tulajdonság?`;
+                task.expectedId = "domB";
+                task.explanation = `Mivel az utódok aránya nagyjából 3:1 (${countB}:${countA}) a <strong>${tB}</strong> javára, egyértelmű, hogy a ${tB} domináns a ${tA} felett.`;
+            } else { // Intermedier (1:2:1 hasadás)
+                countA = Math.round(total * 0.25) + randInt(-2, 2);
+                countB = Math.round(total * 0.25) + randInt(-2, 2);
+                countInter = total - countA - countB;
+                task.text = `Két <strong>${tInter}</strong> ${traitObj.trait}ú ${org.name} keresztezéséből a következő utódnemzedék született: <strong>${countA} db ${tA}</strong>, <strong>${countInter} db ${tInter}</strong> és <strong>${countB} db ${tB}</strong> fenotípusú egyed.<br><br>Hogyan öröklődik a tulajdonság?`;
+                task.expectedId = "inter";
+                task.explanation = `A megfigyelt arány megközelítőleg 1:2:1. Mivel megjelent egy harmadik, kevert/átmeneti fenotípus (${tInter}) a legnagyobb arányban, ez a hiányos dominancia, vagyis az intermedier öröklődés klasszikus bizonyítéka.`;
+            }
+
+            task.options = [
+                { id: "domA", label: `A(z) ${tA} domináns a(z) ${tB} felett.` },
+                { id: "domB", label: `A(z) ${tB} domináns a(z) ${tA} felett.` },
+                { id: "inter", label: `Intermedier módon (hiányos dominancia).` }
+            ];
+
+            return task;
+        }
+
+        // B típus: Dihibrid keresztezés
+        function generateTaskB(org) {
+            let task = { type: 'B' };
+            // Két random tulajdonság
+            let shuffledTraits = shuffleArray([...org.traits]);
+            let t1 = shuffledTraits[0];
+            let t2 = shuffledTraits[1];
+
+            // Rögzítjük a domináns-recesszív viszonyokat
+            let crossType = randInt(0, 2); 
+            // 0: AaBb x AaBb (9:3:3:1)
+            // 1: AaBb x aabb (1:1:1:1)
+            // 2: AABB x aabb (100% egyforma)
+
+            let options = [
+                { id: "9331", label: "9 : 3 : 3 : 1 arányban mind a 4 fenotípus kombináció." },
+                { id: "1111", label: "1 : 1 : 1 : 1 arányban mind a 4 fenotípus kombináció." },
+                { id: "100", label: "100%-ban egyforma fenotípusú lesz az összes utód." },
+                { id: "31", label: "3 : 1 arányban hasadnak a domináns és recesszív kombinációk." }
+            ];
+
+            if (crossType === 0) {
+                task.text = `Egy <strong>${org.name}</strong> tenyésztése során a(z) ${t1.trait} (${t1.dom} domináns, ${t1.rec} recesszív) és a(z) ${t2.trait} (${t2.dom} domináns, ${t2.rec} recesszív) öröklődését vizsgálják független öröklődés esetén.<br><br>Kereszteznek két egyedet, amelyek mindkét tulajdonságra nézve <strong>heterozigóták (<span class="genotype">AaBb</span> x <span class="genotype">AaBb</span>)</strong>.<br>Milyen fenotípus-arány várható az utódoknál?`;
+                task.expectedId = "9331";
+                task.explanation = `Kettős heterozigóták (AaBb x AaBb) független öröklődése esetén a klasszikus Mendeli fenotípus hasadási arány <strong>9:3:3:1</strong>. (9 kettős domináns, 3 egyik domináns-másik recesszív, 3 másik domináns-egyik recesszív, 1 kettős recesszív).`;
+            } else if (crossType === 1) {
+                task.text = `Egy <strong>${org.name}</strong> esetében a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik.<br><br>Kereszteznek egy kettős heterozigóta (<span class="genotype">AaBb</span>) egyedet egy kettős recesszív, "tesztelő" egyeddel (<span class="genotype">aabb</span>).<br>Milyen fenotípus-arány várható az utódoknál?`;
+                task.expectedId = "1111";
+                task.explanation = `Ez egy tesztelő keresztezés (AaBb x aabb). Mivel a heterozigóta szülő 4 féle ivarsejtet termel egyenlő arányban (AB, Ab, aB, ab), a recesszív szülő pedig csak egyfélét (ab), az utódoknál mind a 4 fenotípus egyenlő, azaz <strong>1:1:1:1</strong> arányban jelenik meg.`;
+            } else {
+                task.text = `Egy <strong>${org.name}</strong> esetében a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik.<br><br>Kereszteznek egy homozigóta domináns (<span class="genotype">AABB</span>) egyedet egy homozigóta recesszív (<span class="genotype">aabb</span>) egyeddel.<br>Milyen fenotípus-arány várható az első (F1) utódnemzedékben?`;
+                task.expectedId = "100";
+                task.explanation = `A Mendel első, uniformitás szabálya értelmében homozigóta szülők (AABB x aabb) keresztezésekor az első utódnemzedék (F1) minden tagja genotípusában (AaBb) és fenotípusában (domináns mindkét jellegre) is <strong>100%-ban egyforma</strong> lesz.`;
+            }
+
+            task.options = shuffleArray(options);
+            return task;
+        }
+
+        // C típus: Szülők genotípusának kitalálása
+        function generateTaskC(org, traitObj) {
+            let task = { type: 'C' };
+            
+            // Random domináns / recesszív kiosztás
+            let tD = traitObj.dom;
+            let tR = traitObj.rec;
+
+            let crossType = randInt(0, 2);
+            // 0: Aa x Aa (utódok: 3 Dom : 1 Rec)
+            // 1: Aa x aa (utódok: 1 Dom : 1 Rec)
+            // 2: AA x aa (utódok: mind Dom)
+
+            let total = randInt(80, 150);
+            
+            let options = [
+                { id: "AaAa", label: "<span class='genotype'>Aa x Aa</span> (mindkettő heterozigóta)" },
+                { id: "Aaaa", label: "<span class='genotype'>Aa x aa</span> (egyik heterozigóta, másik recesszív)" },
+                { id: "AAaa", label: "<span class='genotype'>AA x aa</span> (egyik homozigóta domináns, másik recesszív)" },
+                { id: "aaaa", label: "<span class='genotype'>aa x aa</span> (mindkettő recesszív)" }
+            ];
+
+            if (crossType === 0) {
+                let domCount = Math.round(total * 0.75);
+                let recCount = total - domCount;
+                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből <strong>${domCount} db ${tD}</strong> és <strong>${recCount} db ${tR}</strong> egyed született.<br><br>Mi lehetett a két szülő genotípusa?`;
+                task.expectedId = "AaAa";
+                task.explanation = `Mivel mindkét fenotípus megjelent, a szülőknek hordozniuk kellett a recesszív (a) allélt. Ugyanakkor az arány kb. 3:1 a domináns jelleg javára. Ez csak akkor lehetséges, ha mindkét szülő heterozigóta (<span class="genotype">Aa x Aa</span>) volt.`;
+            } else if (crossType === 1) {
+                let domCount = Math.round(total * 0.50) + randInt(-2, 2);
+                let recCount = total - domCount;
+                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből <strong>${domCount} db ${tD}</strong> és <strong>${recCount} db ${tR}</strong> egyed született.<br><br>Mi lehetett a két szülő genotípusa?`;
+                task.expectedId = "Aaaa";
+                task.explanation = `A kapott fenotípus arány majdnem pontosan 1:1. Ez a klasszikus tesztelő keresztezés eredménye, ahol az egyik szülő heterozigóta (<span class="genotype">Aa</span>), a másik pedig homozigóta recesszív (<span class="genotype">aa</span>).`;
+            } else {
+                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből született <strong>${total} egyed mindegyike kivétel nélkül ${tD}</strong> (domináns) fenotípusú lett.<br><br>Tudjuk, hogy az egyik szülő homozigóta recesszív volt. Mi lehetett a másik szülő genotípusa, ha a párosításuk eredménye ez lett?`;
+                task.expectedId = "AAaa"; // Technically asking for the full cross to match options
+                task.explanation = `Ha az utódok 100%-ban domináns fenotípusúak lettek, miközben az egyik szülő recesszív (aa), akkor a Mendel-féle uniformitás szabálya alapján a másik szülőnek homozigóta dominánsnak (AA) kellett lennie. Tehát a keresztezés <span class="genotype">AA x aa</span> volt.`;
+            }
+
+            task.options = shuffleArray(options);
+            return task;
+        }
+
+        // --- VEZÉRLÉS ---
+
+        function renderTask() {
+            document.getElementById("feedbackBox").className = "feedback";
+            document.getElementById("feedbackBox").style.display = "none";
+            
+            let org = organisms[randInt(0, organisms.length - 1)];
+            let trait = org.traits[randInt(0, org.traits.length - 1)];
+            
+            let taskType = randInt(0, 2);
+            if (taskType === 0) currentTask = generateTaskA(org, trait);
+            else if (taskType === 1) currentTask = generateTaskB(org);
+            else currentTask = generateTaskC(org, trait);
+
+            let typeNames = { 'A': 'Öröklődés menetének meghatározása', 'B': 'Dihibrid keresztezés', 'C': 'Szülők genotípusának kikövetkeztetése' };
+            document.getElementById('taskTitle').innerText = typeNames[currentTask.type];
+            document.getElementById('taskText').innerHTML = currentTask.text;
+
+            let optsHtml = "";
+            currentTask.options.forEach(opt => {
+                optsHtml += `<label class="radio-label">
+                    <input type="radio" name="mendel_answer" value="${opt.id}">
+                    <span>${opt.label}</span>
+                </label>`;
+            });
+            document.getElementById('optionsContainer').innerHTML = optsHtml;
+        }
+
+        document.getElementById('checkBtn').addEventListener('click', () => {
+            if (!currentTask) return;
+            
+            let selected = document.querySelector('input[name="mendel_answer"]:checked');
+            if (!selected) {
+                alert("Kérlek válassz egy válaszlehetőséget!");
+                return;
+            }
+            
+            let isCorrect = (selected.value === currentTask.expectedId);
+            let fbBox = document.getElementById("feedbackBox");
+
+            fbBox.className = "feedback " + (isCorrect ? "success" : "error");
+            
+            let resultTitle = isCorrect ? "✅ Helyes válasz! Szigorú, de logikus következtetés." : "❌ Helytelen válasz. Nézzük a tényeket!";
+            let resultHtml = `<h3>${resultTitle}</h3>`;
+            
+            resultHtml += `<div class="explanation" ${isCorrect ? 'style="opacity:0.8"' : ''}>
+                <strong>Magyarázat:</strong><br>${currentTask.explanation}
+            </div>`;
+
+            fbBox.innerHTML = resultHtml;
+            fbBox.style.display = "block";
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', renderTask);
+
+        // Első futtatás
+        window.addEventListener('DOMContentLoaded', renderTask);
+    </script>
+</body>
+</html>
