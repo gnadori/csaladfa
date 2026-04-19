@@ -207,6 +207,8 @@
             font-family: 'Inter', monospace;
             font-weight: 800;
             letter-spacing: 1px;
+            background: #eee;
+            padding: 0 4px;
         }
     </style>
 </head>
@@ -214,7 +216,7 @@
 
     <header class="site-header">
         <div class="logo">Rozsomák tanár úr</div>
-        <div>Mendeli öröklődés gyakorló</div>
+        <div>Mendeli öröklődés gyakorló (Haladó)</div>
     </header>
 
     <main class="main-container">
@@ -239,58 +241,12 @@
     </footer>
 
     <script>
-        // Adatbázis az élőlényekről és tulajdonságaikról (Intermedier jelleg is biztosítva)
         const organisms = [
-            { 
-                name: "kardszárnyú delfin", 
-                traits: [ 
-                    { trait: "hátúszó alakja", dom: "egyenes", rec: "hajlott", inter: "enyhén ívelt" }, 
-                    { trait: "szemfolt mérete", dom: "nagy", rec: "kicsi", inter: "közepes" }, 
-                    { trait: "hasi folt színe", dom: "hófehér", rec: "sárgás", inter: "törtfehér" }, 
-                    { trait: "testhossz", dom: "hosszú", rec: "rövid", inter: "átlagos" }, 
-                    { trait: "farokúszó szélessége", dom: "széles", rec: "keskeny", inter: "közepes" } 
-                ] 
-            },
-            { 
-                name: "pampanyúl", 
-                traits: [ 
-                    { trait: "fülek hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, 
-                    { trait: "szőrzet színe", dom: "vadasbarna", rec: "szürke", inter: "fakóbarna" }, 
-                    { trait: "lábak hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, 
-                    { trait: "bajuszszálak vastagsága", dom: "vastag", rec: "vékony", inter: "normál" }, 
-                    { trait: "farok mérete", dom: "hosszú", rec: "csonka", inter: "félhosszú" } 
-                ] 
-            },
-            { 
-                name: "ecetmuslica", 
-                traits: [ 
-                    { trait: "szemszín", dom: "piros", rec: "fehér", inter: "rózsaszín" }, 
-                    { trait: "szárny alakja", dom: "normál", rec: "csökevényes", inter: "féloldalas" }, 
-                    { trait: "testszín", dom: "világosbarna", rec: "ébenfekete", inter: "sötétbarna" }, 
-                    { trait: "sörték hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, 
-                    { trait: "tor mintázata", dom: "sima", rec: "csíkos", inter: "halványan csíkos" } 
-                ] 
-            },
-            { 
-                name: "sárgarépa", 
-                traits: [ 
-                    { trait: "gyökér színe", dom: "narancs", rec: "sárga", inter: "halványnarancs" }, 
-                    { trait: "gyökér alakja", dom: "hengeres", rec: "kúpos", inter: "félkúpos" }, 
-                    { trait: "levélzet sűrűsége", dom: "sűrű", rec: "ritka", inter: "közepes" }, 
-                    { trait: "cukortartalom", dom: "magas", rec: "alacsony", inter: "közepes" }, 
-                    { trait: "szárhossz", dom: "hosszú", rec: "rövid", inter: "félhosszú" } 
-                ] 
-            },
-            { 
-                name: "halvány geze", 
-                traits: [ 
-                    { trait: "tollazat mintázata", dom: "csíkos", rec: "pöttyös", inter: "foltos" }, 
-                    { trait: "szárnyfesztáv", dom: "széles", rec: "keskeny", inter: "közepes" }, 
-                    { trait: "csőr hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, 
-                    { trait: "ének hangmagassága", dom: "magas", rec: "mély", inter: "közepes" }, 
-                    { trait: "lábujjak hossza", dom: "hosszú", rec: "rövid", inter: "normál" } 
-                ] 
-            }
+            { name: "kardszárnyú delfin", traits: [ { trait: "hátúszó alakja", dom: "egyenes", rec: "hajlott", inter: "enyhén ívelt" }, { trait: "szemfolt mérete", dom: "nagy", rec: "kicsi", inter: "közepes" }, { trait: "hasi folt színe", dom: "hófehér", rec: "sárgás", inter: "törtfehér" }, { trait: "testhossz", dom: "hosszú", rec: "rövid", inter: "átlagos" }, { trait: "farokúszó szélessége", dom: "széles", rec: "keskeny", inter: "közepes" } ] },
+            { name: "pampanyúl", traits: [ { trait: "fülek hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, { trait: "szőrzet színe", dom: "vadasbarna", rec: "szürke", inter: "fakóbarna" }, { trait: "lábak hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, { trait: "bajuszszálak vastagsága", dom: "vastag", rec: "vékony", inter: "normál" }, { trait: "farok mérete", dom: "hosszú", rec: "csonka", inter: "félhosszú" } ] },
+            { name: "ecetmuslica", traits: [ { trait: "szemszín", dom: "piros", rec: "fehér", inter: "rózsaszín" }, { trait: "szárny alakja", dom: "normál", rec: "csökevényes", inter: "féloldalas" }, { trait: "testszín", dom: "világosbarna", rec: "ébenfekete", inter: "sötétbarna" }, { trait: "sörték hossza", dom: "hosszú", rec: "rövid", inter: "közepes" }, { trait: "tor mintázata", dom: "sima", rec: "csíkos", inter: "halványan csíkos" } ] },
+            { name: "sárgarépa", traits: [ { trait: "gyökér színe", dom: "narancs", rec: "sárga", inter: "halványnarancs" }, { trait: "gyökér alakja", dom: "hengeres", rec: "kúpos", inter: "félkúpos" }, { trait: "levélzet sűrűsége", dom: "sűrű", rec: "ritka", inter: "közepes" }, { trait: "cukortartalom", dom: "magas", rec: "alacsony", inter: "közepes" }, { trait: "szárhossz", dom: "hosszú", rec: "rövid", inter: "félhosszú" } ] },
+            { name: "halvány geze", traits: [ { trait: "tollazat mintázata", dom: "csíkos", rec: "pöttyös", inter: "foltos" }, { trait: "szárnyfesztáv", dom: "széles", rec: "keskeny", inter: "közepes" }, { trait: "csőr hossza", dom: "hosszú", rec: "rövid", inter: "félhosszú" }, { trait: "ének hangmagassága", dom: "magas", rec: "mély", inter: "közepes" }, { trait: "lábujjak hossza", dom: "hosszú", rec: "rövid", inter: "normál" } ] }
         ];
 
         let currentTask = null;
@@ -307,156 +263,161 @@
             return array;
         }
 
-        // --- FELADAT GENERÁTOROK ---
-
-        // A típus: Öröklődés menetének kikövetkeztetése számokból
+        // --- A TÍPUSÚ FELADATOK (Öröklődés menete) ---
         function generateTaskA(org, traitObj) {
             let task = { type: 'A' };
-            
-            // Randomizáljuk, melyik jelleg a "valódi" domináns a feladatban
-            let tA = traitObj.dom;
-            let tB = traitObj.rec;
+            let tA = traitObj.dom; let tB = traitObj.rec;
             if (Math.random() > 0.5) { tA = traitObj.rec; tB = traitObj.dom; }
             let tInter = traitObj.inter;
 
-            let mode = randInt(0, 2); // 0: tA domináns, 1: tB domináns, 2: intermedier
-            let total = randInt(100, 250);
-            
-            let countA, countB, countInter = 0;
+            let mode = randInt(0, 3); // 4 altípus
+            let total = randInt(100, 300);
 
-            if (mode === 0) { // tA domináns (3:1 hasadás)
-                countA = Math.round(total * 0.75) + randInt(-3, 3);
-                countB = total - countA;
-                task.text = `Egy kutatócsoport két <strong>${tA}</strong> ${traitObj.trait}ú ${org.name} egyedet keresztezett (mindkettő heterozigóta volt). Az utódok között <strong>${countA} db ${tA}</strong> és <strong>${countB} db ${tB}</strong> fenotípusú egyedet számoltak.<br><br>Hogyan öröklődik a tulajdonság?`;
+            if (mode === 0) { // 3:1 Dom/Rec
+                let countA = Math.round(total * 0.75) + randInt(-3, 3);
+                let countB = total - countA;
+                task.text = `Két <strong>${tA}</strong> ${traitObj.trait}ú ${org.name} egyedet kereszteztek. Az utódok között <strong>${countA} db ${tA}</strong> és <strong>${countB} db ${tB}</strong> fenotípusú lett.<br><br>Hogyan öröklődik a tulajdonság?`;
                 task.expectedId = "domA";
-                task.explanation = `Mivel az utódok aránya nagyjából 3:1 (${countA}:${countB}) a <strong>${tA}</strong> javára, egyértelmű, hogy a ${tA} domináns a ${tB} felett. Ez a klasszikus Mendeli monohibrid keresztezés heterozigóták közötti (Aa x Aa) hasadási aránya.`;
-            } else if (mode === 1) { // tB domináns (3:1 hasadás)
-                countB = Math.round(total * 0.75) + randInt(-3, 3);
-                countA = total - countB;
-                task.text = `Egy kutatócsoport két <strong>${tB}</strong> ${traitObj.trait}ú ${org.name} egyedet keresztezett. Az utódok között <strong>${countB} db ${tB}</strong> és <strong>${countA} db ${tA}</strong> fenotípusú egyedet számoltak.<br><br>Hogyan öröklődik a tulajdonság?`;
+                task.explanation = `A 3:1 arány (${countA}:${countB}) klasszikus domináns-recesszív hasadás két heterozigóta szülő esetén. A nagyobb arányban megjelenő jelleg (${tA}) a domináns.`;
+            } else if (mode === 1) { // 100% Uniformitás (Mendel I)
+                task.text = `Kereszteztek egy tiszta vérvonalú (homozigóta) <strong>${tA}</strong> és egy tiszta vérvonalú <strong>${tB}</strong> ${traitObj.trait}ú egyedet. Az első utódnemzedék <strong>100%-a ${tB}</strong> fenotípusú lett.<br><br>Hogyan öröklődik a tulajdonság?`;
                 task.expectedId = "domB";
-                task.explanation = `Mivel az utódok aránya nagyjából 3:1 (${countB}:${countA}) a <strong>${tB}</strong> javára, egyértelmű, hogy a ${tB} domináns a ${tA} felett.`;
-            } else { // Intermedier (1:2:1 hasadás)
-                countA = Math.round(total * 0.25) + randInt(-2, 2);
-                countB = Math.round(total * 0.25) + randInt(-2, 2);
-                countInter = total - countA - countB;
-                task.text = `Két <strong>${tInter}</strong> ${traitObj.trait}ú ${org.name} keresztezéséből a következő utódnemzedék született: <strong>${countA} db ${tA}</strong>, <strong>${countInter} db ${tInter}</strong> és <strong>${countB} db ${tB}</strong> fenotípusú egyed.<br><br>Hogyan öröklődik a tulajdonság?`;
+                task.explanation = `Mendel I. (uniformitás) törvénye alapján, ha két különböző tiszta vérvonalat keresztezünk, az F1 nemzedék az egyik szülő fenotípusát veszi fel 100%-ban. Ez a jelleg (${tB}) a domináns.`;
+            } else if (mode === 2) { // 1:2:1 Intermedier
+                let cA = Math.round(total * 0.25) + randInt(-2, 2);
+                let cB = Math.round(total * 0.25) + randInt(-2, 2);
+                let cI = total - cA - cB;
+                task.text = `Két <strong>${tInter}</strong> ${traitObj.trait}ú ${org.name} keresztezéséből: <strong>${cA} db ${tA}</strong>, <strong>${cI} db ${tInter}</strong> és <strong>${cB} db ${tB}</strong> egyed született.<br><br>Hogyan öröklődik a tulajdonság?`;
                 task.expectedId = "inter";
-                task.explanation = `A megfigyelt arány megközelítőleg 1:2:1. Mivel megjelent egy harmadik, kevert/átmeneti fenotípus (${tInter}) a legnagyobb arányban, ez a hiányos dominancia, vagyis az intermedier öröklődés klasszikus bizonyítéka.`;
+                task.explanation = `Az arány nagyjából 1:2:1. Egy harmadik, átmeneti fenotípus (${tInter}) jelenik meg a legnagyobb számban heterozigóták keresztezésénél, ami a hiányos dominancia (intermedier öröklődés) bizonyítéka.`;
+            } else { // 2:1 Letális allél
+                let domCount = Math.round(total * 0.66) + randInt(-2, 2);
+                let recCount = total - domCount;
+                task.text = `Két <strong>${tA}</strong> ${traitObj.trait}ú ${org.name} egyed keresztezésekor feltűnően kevesebb utód született a vártnál. A megszületett utódok közül <strong>${domCount} db ${tA}</strong> és <strong>${recCount} db ${tB}</strong> fenotípusú volt.<br><br>Mire következtetsz az öröklődés menetéből?`;
+                task.expectedId = "lethal";
+                task.explanation = `Az arány 2:1 (${domCount}:${recCount}). Ez akkor fordul elő, ha a domináns homozigóta (AA) genotípus letális (életképtelen) és elpusztul még születés előtt. Csak a heterozigóták (Aa) adják a domináns fenotípust, és a recesszívek (aa) a recesszívet.`;
             }
 
             task.options = [
                 { id: "domA", label: `A(z) ${tA} domináns a(z) ${tB} felett.` },
                 { id: "domB", label: `A(z) ${tB} domináns a(z) ${tA} felett.` },
-                { id: "inter", label: `Intermedier módon (hiányos dominancia).` }
+                { id: "inter", label: `Intermedier módon (hiányos dominancia).` },
+                { id: "lethal", label: `A(z) ${tA} domináns, de homozigóta formában letális (halálos).` }
             ];
-
             return task;
         }
 
-        // B típus: Dihibrid keresztezés
+        // --- B TÍPUSÚ FELADATOK (Dihibrid arányok és valószínűségek) ---
         function generateTaskB(org) {
             let task = { type: 'B' };
-            // Két random tulajdonság
-            let shuffledTraits = shuffleArray([...org.traits]);
-            let t1 = shuffledTraits[0];
-            let t2 = shuffledTraits[1];
+            let t1 = org.traits[0]; let t2 = org.traits[1];
+            let mode = randInt(0, 3); // 4 altípus
 
-            // Rögzítjük a domináns-recesszív viszonyokat
-            let crossType = randInt(0, 2); 
-            // 0: AaBb x AaBb (9:3:3:1)
-            // 1: AaBb x aabb (1:1:1:1)
-            // 2: AABB x aabb (100% egyforma)
-
-            let options = [
-                { id: "9331", label: "9 : 3 : 3 : 1 arányban mind a 4 fenotípus kombináció." },
-                { id: "1111", label: "1 : 1 : 1 : 1 arányban mind a 4 fenotípus kombináció." },
-                { id: "100", label: "100%-ban egyforma fenotípusú lesz az összes utód." },
-                { id: "31", label: "3 : 1 arányban hasadnak a domináns és recesszív kombinációk." }
-            ];
-
-            if (crossType === 0) {
-                task.text = `Egy <strong>${org.name}</strong> tenyésztése során a(z) ${t1.trait} (${t1.dom} domináns, ${t1.rec} recesszív) és a(z) ${t2.trait} (${t2.dom} domináns, ${t2.rec} recesszív) öröklődését vizsgálják független öröklődés esetén.<br><br>Kereszteznek két egyedet, amelyek mindkét tulajdonságra nézve <strong>heterozigóták (<span class="genotype">AaBb</span> x <span class="genotype">AaBb</span>)</strong>.<br>Milyen fenotípus-arány várható az utódoknál?`;
+            if (mode === 0) { // Klasszikus 9:3:3:1
+                task.text = `A(z) ${org.name} esetén a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik (két allél, domináns-recesszív).<br><br>Keresztezünk két egyedet: <span class="genotype">AaBb x AaBb</span>.<br>Milyen fenotípus-arány várható az utódoknál?`;
                 task.expectedId = "9331";
-                task.explanation = `Kettős heterozigóták (AaBb x AaBb) független öröklődése esetén a klasszikus Mendeli fenotípus hasadási arány <strong>9:3:3:1</strong>. (9 kettős domináns, 3 egyik domináns-másik recesszív, 3 másik domináns-egyik recesszív, 1 kettős recesszív).`;
-            } else if (crossType === 1) {
-                task.text = `Egy <strong>${org.name}</strong> esetében a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik.<br><br>Kereszteznek egy kettős heterozigóta (<span class="genotype">AaBb</span>) egyedet egy kettős recesszív, "tesztelő" egyeddel (<span class="genotype">aabb</span>).<br>Milyen fenotípus-arány várható az utódoknál?`;
+                task.explanation = `Kettős heterozigóták (AaBb x AaBb) független öröklődése esetén a klasszikus Mendeli fenotípus hasadási arány <strong>9:3:3:1</strong>.`;
+                task.options = [
+                    { id: "9331", label: "9 : 3 : 3 : 1" }, { id: "1111", label: "1 : 1 : 1 : 1" },
+                    { id: "31", label: "3 : 1" }, { id: "97", label: "9 : 7" }
+                ];
+            } else if (mode === 1) { // Tesztelő 1:1:1:1
+                task.text = `A(z) ${org.name} esetén a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik.<br><br>Keresztezünk egy <span class="genotype">AaBb</span> egyedet egy <span class="genotype">aabb</span> egyeddel.<br>Milyen fenotípus-arány várható?`;
                 task.expectedId = "1111";
-                task.explanation = `Ez egy tesztelő keresztezés (AaBb x aabb). Mivel a heterozigóta szülő 4 féle ivarsejtet termel egyenlő arányban (AB, Ab, aB, ab), a recesszív szülő pedig csak egyfélét (ab), az utódoknál mind a 4 fenotípus egyenlő, azaz <strong>1:1:1:1</strong> arányban jelenik meg.`;
-            } else {
-                task.text = `Egy <strong>${org.name}</strong> esetében a(z) ${t1.trait} és a(z) ${t2.trait} függetlenül öröklődik.<br><br>Kereszteznek egy homozigóta domináns (<span class="genotype">AABB</span>) egyedet egy homozigóta recesszív (<span class="genotype">aabb</span>) egyeddel.<br>Milyen fenotípus-arány várható az első (F1) utódnemzedékben?`;
-                task.expectedId = "100";
-                task.explanation = `A Mendel első, uniformitás szabálya értelmében homozigóta szülők (AABB x aabb) keresztezésekor az első utódnemzedék (F1) minden tagja genotípusában (AaBb) és fenotípusában (domináns mindkét jellegre) is <strong>100%-ban egyforma</strong> lesz.`;
+                task.explanation = `Ez egy tesztelő keresztezés. A heterozigóta 4 féle ivarsejtet ad, a recesszív csak 1 félét, így mind a 4 fenotípus egyenlő eséllyel, <strong>1:1:1:1</strong> arányban jelenik meg.`;
+                task.options = [
+                    { id: "9331", label: "9 : 3 : 3 : 1" }, { id: "1111", label: "1 : 1 : 1 : 1" },
+                    { id: "11", label: "1 : 1" }, { id: "121", label: "1 : 2 : 1" }
+                ];
+            } else if (mode === 2) { // Kiszámított valószínűség 1
+                task.text = `Két <span class="genotype">AaBb</span> genotípusú ${org.name} egyedet keresztezünk (a tulajdonságok függetlenül öröklődnek).<br><br>Mekkora a valószínűsége annak, hogy egy születendő utód mindkét tulajdonságra nézve <strong>recesszív (<span class="genotype">aabb</span>)</strong> lesz?`;
+                task.expectedId = "1_16";
+                task.explanation = `Független öröklődésnél a valószínűségek szorzódnak. Az 'aa' esélye az Aa x Aa keresztezésből 1/4. A 'bb' esélye a Bb x Bb keresztezésből szintén 1/4. Tehát 1/4 &times; 1/4 = <strong>1/16</strong>.`;
+                task.options = [
+                    { id: "1_16", label: "1 / 16" }, { id: "3_16", label: "3 / 16" },
+                    { id: "1_4", label: "1 / 4" }, { id: "1_8", label: "1 / 8" }
+                ];
+            } else { // Kiszámított valószínűség 2
+                task.text = `Egy <span class="genotype">AaBb</span> és egy <span class="genotype">Aabb</span> genotípusú ${org.name} egyedet keresztezünk.<br><br>Mekkora az esélye annak, hogy az utód genotípusa <strong><span class="genotype">aabb</span></strong> lesz?`;
+                task.expectedId = "1_8";
+                task.explanation = `Nézzük génenként: az Aa x Aa keresztezésből az 'aa' esélye 1/4. A Bb x bb keresztezésből a 'bb' esélye 1/2. A kettő szorzata: 1/4 &times; 1/2 = <strong>1/8</strong>.`;
+                task.options = [
+                    { id: "1_16", label: "1 / 16" }, { id: "1_8", label: "1 / 8" },
+                    { id: "1_4", label: "1 / 4" }, { id: "0", label: "0 (Lehetetlen)" }
+                ];
             }
-
-            task.options = shuffleArray(options);
             return task;
         }
 
-        // C típus: Szülők genotípusának kitalálása
+        // --- C TÍPUSÚ FELADATOK (Szülők genotípusának kikövetkeztetése) ---
         function generateTaskC(org, traitObj) {
             let task = { type: 'C' };
-            
-            // Random domináns / recesszív kiosztás
-            let tD = traitObj.dom;
-            let tR = traitObj.rec;
-
-            let crossType = randInt(0, 2);
-            // 0: Aa x Aa (utódok: 3 Dom : 1 Rec)
-            // 1: Aa x aa (utódok: 1 Dom : 1 Rec)
-            // 2: AA x aa (utódok: mind Dom)
-
+            let tD = traitObj.dom; let tR = traitObj.rec; let tI = traitObj.inter;
+            let mode = randInt(0, 4); // 5 altípus
             let total = randInt(80, 150);
-            
-            let options = [
-                { id: "AaAa", label: "<span class='genotype'>Aa x Aa</span> (mindkettő heterozigóta)" },
-                { id: "Aaaa", label: "<span class='genotype'>Aa x aa</span> (egyik heterozigóta, másik recesszív)" },
-                { id: "AAaa", label: "<span class='genotype'>AA x aa</span> (egyik homozigóta domináns, másik recesszív)" },
-                { id: "aaaa", label: "<span class='genotype'>aa x aa</span> (mindkettő recesszív)" }
-            ];
 
-            if (crossType === 0) {
-                let domCount = Math.round(total * 0.75);
-                let recCount = total - domCount;
-                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből <strong>${domCount} db ${tD}</strong> és <strong>${recCount} db ${tR}</strong> egyed született.<br><br>Mi lehetett a két szülő genotípusa?`;
+            if (mode === 0) { // Aa x Aa -> 3:1
+                let dC = Math.round(total * 0.75); let rC = total - dC;
+                task.text = `Egy keresztezésből <strong>${dC} db ${tD}</strong> (domináns) és <strong>${rC} db ${tR}</strong> (recesszív) utód született.<br><br>Mik lehettek a szülők?`;
                 task.expectedId = "AaAa";
-                task.explanation = `Mivel mindkét fenotípus megjelent, a szülőknek hordozniuk kellett a recesszív (a) allélt. Ugyanakkor az arány kb. 3:1 a domináns jelleg javára. Ez csak akkor lehetséges, ha mindkét szülő heterozigóta (<span class="genotype">Aa x Aa</span>) volt.`;
-            } else if (crossType === 1) {
-                let domCount = Math.round(total * 0.50) + randInt(-2, 2);
-                let recCount = total - domCount;
-                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből <strong>${domCount} db ${tD}</strong> és <strong>${recCount} db ${tR}</strong> egyed született.<br><br>Mi lehetett a két szülő genotípusa?`;
+                task.explanation = `A 3:1 domináns-recesszív arány kizárólag két heterozigóta (<span class="genotype">Aa x Aa</span>) szülő esetén jön létre.`;
+            } else if (mode === 1) { // Aa x aa -> 1:1
+                let dC = Math.round(total * 0.5); let rC = total - dC;
+                task.text = `Egy keresztezésből <strong>${dC} db ${tD}</strong> (domináns) és <strong>${rC} db ${tR}</strong> (recesszív) utód született.<br><br>Mik lehettek a szülők?`;
                 task.expectedId = "Aaaa";
-                task.explanation = `A kapott fenotípus arány majdnem pontosan 1:1. Ez a klasszikus tesztelő keresztezés eredménye, ahol az egyik szülő heterozigóta (<span class="genotype">Aa</span>), a másik pedig homozigóta recesszív (<span class="genotype">aa</span>).`;
-            } else {
-                task.text = `Egy <strong>${org.name}</strong> tenyészetben a(z) ${traitObj.trait} vizsgálatakor (${tD} a domináns, ${tR} a recesszív jelleg) egy keresztezésből született <strong>${total} egyed mindegyike kivétel nélkül ${tD}</strong> (domináns) fenotípusú lett.<br><br>Tudjuk, hogy az egyik szülő homozigóta recesszív volt. Mi lehetett a másik szülő genotípusa, ha a párosításuk eredménye ez lett?`;
-                task.expectedId = "AAaa"; // Technically asking for the full cross to match options
-                task.explanation = `Ha az utódok 100%-ban domináns fenotípusúak lettek, miközben az egyik szülő recesszív (aa), akkor a Mendel-féle uniformitás szabálya alapján a másik szülőnek homozigóta dominánsnak (AA) kellett lennie. Tehát a keresztezés <span class="genotype">AA x aa</span> volt.`;
+                task.explanation = `Az 1:1 arány egy tipikus tesztelő keresztezés eredménye, ahol az egyik szülő heterozigóta (<span class="genotype">Aa</span>), a másik homozigóta recesszív (<span class="genotype">aa</span>).`;
+            } else if (mode === 2) { // AA x aa -> 100% Aa
+                task.text = `Tudjuk, hogy az egyik szülő fenotípusa <strong>${tR}</strong> (recesszív) volt. Az összes utód (100%) mégis <strong>${tD}</strong> (domináns) fenotípusú lett.<br><br>Mi volt a másik szülő genotípusa?`;
+                task.expectedId = "AA";
+                task.explanation = `Ahhoz, hogy egy recesszív (aa) szülő mellett minden utód domináns legyen, a másik szülőnek kizárólag domináns allélt szabad örökítenie. Így a másik szülő csak homozigóta domináns (<span class="genotype">AA</span>) lehet.`;
+                task.options = [
+                    { id: "AA", label: "<span class='genotype'>AA</span> (homozigóta domináns)" },
+                    { id: "Aa", label: "<span class='genotype'>Aa</span> (heterozigóta)" },
+                    { id: "aa", label: "<span class='genotype'>aa</span> (homozigóta recesszív)" },
+                    { id: "A", label: "Eldönthetetlen, lehet AA vagy Aa is." }
+                ];
+                return task; // Korai visszatérés a specifikus opciók miatt
+            } else if (mode === 3) { // Aa x AA (Intermedier 1:1)
+                let cI = Math.round(total * 0.5); let cD = total - cI;
+                task.text = `A(z) ${traitObj.trait} <strong>intermedier</strong> módon öröklődik. Egy párosításból <strong>${cI} db ${tI}</strong> (kevert) és <strong>${cD} db ${tD}</strong> (egyik tiszta) fenotípusú utód született.<br><br>Mi volt a szülők genotípusa?`;
+                task.expectedId = "AaAA";
+                task.explanation = `Ahhoz, hogy tiszta (AA) és kevert (Aa) utódok 1:1 arányban szülessenek, az egyik szülőnek kevertnek (Aa), a másiknak tisztának (AA) kellett lennie.`;
+            } else { // AA x aa (Intermedier 100%)
+                task.text = `A(z) ${traitObj.trait} <strong>intermedier</strong> módon öröklődik. Két egyed párosításából az utódok <strong>100%-a ${tI}</strong> (kevert/átmeneti) fenotípusú lett.<br><br>Mik lehettek a szülők?`;
+                task.expectedId = "AAaa";
+                task.explanation = `Csak úgy lehet minden utód heterozigóta (Aa, kevert), ha az egyik szülő az egyik tiszta vonal (AA), a másik pedig a másik tiszta vonal (aa).`;
             }
 
-            task.options = shuffleArray(options);
+            task.options = [
+                { id: "AaAa", label: "<span class='genotype'>Aa x Aa</span>" },
+                { id: "Aaaa", label: "<span class='genotype'>Aa x aa</span>" },
+                { id: "AAaa", label: "<span class='genotype'>AA x aa</span>" },
+                { id: "AaAA", label: "<span class='genotype'>Aa x AA</span>" }
+            ];
             return task;
         }
 
         // --- VEZÉRLÉS ---
-
         function renderTask() {
             document.getElementById("feedbackBox").className = "feedback";
             document.getElementById("feedbackBox").style.display = "none";
             
             let org = organisms[randInt(0, organisms.length - 1)];
-            let trait = org.traits[randInt(0, org.traits.length - 1)];
+            // Trait shuffle hogy B feladatnál a 0. és 1. index mindig véletlen legyen
+            shuffleArray(org.traits);
+            let trait = org.traits[0]; 
             
             let taskType = randInt(0, 2);
             if (taskType === 0) currentTask = generateTaskA(org, trait);
             else if (taskType === 1) currentTask = generateTaskB(org);
             else currentTask = generateTaskC(org, trait);
 
-            let typeNames = { 'A': 'Öröklődés menetének meghatározása', 'B': 'Dihibrid keresztezés', 'C': 'Szülők genotípusának kikövetkeztetése' };
+            let typeNames = { 'A': 'Öröklődés menetének elemzése', 'B': 'Dihibrid öröklődés és valószínűségek', 'C': 'Szülői genotípusok felderítése' };
             document.getElementById('taskTitle').innerText = typeNames[currentTask.type];
             document.getElementById('taskText').innerHTML = currentTask.text;
 
             let optsHtml = "";
-            currentTask.options.forEach(opt => {
+            shuffleArray(currentTask.options).forEach(opt => {
                 optsHtml += `<label class="radio-label">
                     <input type="radio" name="mendel_answer" value="${opt.id}">
                     <span>${opt.label}</span>
@@ -478,21 +439,18 @@
             let fbBox = document.getElementById("feedbackBox");
 
             fbBox.className = "feedback " + (isCorrect ? "success" : "error");
+            let resultTitle = isCorrect ? "✅ Helyes válasz! A logika kikezdhetetlen." : "❌ Helytelen válasz. Nézzük a tényeket!";
             
-            let resultTitle = isCorrect ? "✅ Helyes válasz! Szigorú, de logikus következtetés." : "❌ Helytelen válasz. Nézzük a tényeket!";
-            let resultHtml = `<h3>${resultTitle}</h3>`;
-            
-            resultHtml += `<div class="explanation" ${isCorrect ? 'style="opacity:0.8"' : ''}>
-                <strong>Magyarázat:</strong><br>${currentTask.explanation}
-            </div>`;
-
-            fbBox.innerHTML = resultHtml;
+            fbBox.innerHTML = `
+                <h3>${resultTitle}</h3>
+                <div class="explanation" ${isCorrect ? 'style="opacity:0.8"' : ''}>
+                    <strong>Tanári magyarázat:</strong><br>${currentTask.explanation}
+                </div>`;
             fbBox.style.display = "block";
         });
 
         document.getElementById('nextBtn').addEventListener('click', renderTask);
 
-        // Első futtatás
         window.addEventListener('DOMContentLoaded', renderTask);
     </script>
 </body>
